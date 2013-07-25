@@ -1,0 +1,4 @@
+{
+
+  "SQL_CONN" : "Driver={SQL Server Native Client 10.0}; Server=tcp:a20olypuzc.database.windows.net,1433;Database=WriterController;Uid=writer@a20olypuzc;Pwd=Wmoon0987;Encrypt=yes;Connection Timeout=30;"
+}
