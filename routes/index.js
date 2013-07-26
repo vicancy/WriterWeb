@@ -12,8 +12,7 @@ exports.index = function(req, res){
     	if(err){
 			throw err;
 		}
-		res.render('index', {title: 'My NoteBooks', task: items})
+		res.render('index', {title: 'My NoteBooks', tasks: items})
 	})
-    //res.render('index', {title: 'My NoteBooks'});
 };
 
