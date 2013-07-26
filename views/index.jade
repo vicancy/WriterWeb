@@ -1,6 +1,10 @@
 extends layout
 
 block content
-    h1= title
-        each row in tasks
-            li= row.nvc_notebook_name
+    .container-fluid
+        .span3
+            h4= title
+                each row in tasks
+                    li= row.nvc_notebook_name
+        .span9
+            textarea
