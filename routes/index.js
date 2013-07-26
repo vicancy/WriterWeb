@@ -1,5 +1,5 @@
 var nconf = require('nconf');
-    //,sql = require('msnodesql'); 
+    ,sql = require('msnodesql'); 
 
 nconf.env()
 	 .file({ file: 'config.json'});
