@@ -8,11 +8,14 @@ var conn = nconf.get("SQL_CONN");
 
 exports.index = function(req, res){
 	var select = "select * from notebook";
+    var title = "My NoteBooks";
 	sql.query(conn, select, function(err, items){
     	if(err){
 			throw err;
 		}
-		res.render('index', {title: 'My NoteBooks', tasks: items})
+        console.log(select + title);
+        console.log(items);
+		res.render('index', {title: title, tasks: items});
 	})
 };
 

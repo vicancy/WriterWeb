@@ -1,8 +1,6 @@
 extends layout
 
 block content
-  h1= title
-  each task in tasks
-      tr
-        td #{task.nvc_unique_address}
-        
+    h1= title
+        each row in tasks
+            li= row.nvc_notebook_name
