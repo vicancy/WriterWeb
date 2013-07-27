@@ -1,0 +1,11 @@
+extends layout
+
+block content
+  .container-fluid
+    .row-fluid
+      .span2
+        h4= title
+        each row in tasks
+          a= row.nvc_notebook_name
+      .span7.offset1
+        textarea Article content here

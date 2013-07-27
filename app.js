@@ -1,8 +1,11 @@
-var express = require("express")
-  , routes = require('./routes')
-  , user = require('./routes/user')
-  , http = require('http')
-  , path = require('path');
+var express = require("express"),
+  routes = require('./routes'),
+  user = require('./routes/user'),
+  writer = require('./routes/writer'),
+  settings = require('./routes/settings'),
+  article = require('./routes/article'),
+  http = require('http'),
+  path = require('path');
 
 var app = express();
 
@@ -18,14 +21,18 @@ app.use(app.router);
 app.use(express.static(path.join(__dirname, 'public')));
 
 // development only
-if ('development' == app.get('env')) {
+if ('development' === app.get('env')) {
   app.use(express.errorHandler());
   app.get('/', routes.index);
+  app.get('/writer', writer.writer);
 }
 
 app.get('/', routes.index);
 app.get('/users', user.list);
+app.get('/writer', writer.writer);
+app.get('/settings', settings.settings);
+app.get('/article', article.article);
 
-http.createServer(app).listen(app.get('port'), function(){
+http.createServer(app).listen(app.get('port'), function () {
   console.log('Express server listening on port ' + app.get('port'));
 });

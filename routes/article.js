@@ -6,15 +6,17 @@ nconf.env()
 
 var conn = nconf.get("SQL_CONN");
 
-exports.index = function (req, res) {
-  var string = "select * from notebook";
-  var title = "My NoteBooks";
+exports.article = function (req, res) {
+  var string = "select * from article";
+  var title = "Article Title";
+  var author = "vicancy";
+  var content = "Article content here";
   sql.query(conn, string, function (err, items) {
     if (err) {
       throw err;
     }
     console.log(items);
-    res.render('index', {title: title, tasks: items});
+    res.render('article', {title: title, author: author, content: content});
   });
 };
 
