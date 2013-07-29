@@ -1,0 +1,20 @@
+extends layout
+
+block content
+  .container-fluid
+    .row-fluid
+      .span2
+        .container
+          .row-fluid
+            .row
+              h4 Vicancy
+              a(href='/Settings') Edit Profile
+              p.small Wrote 506 words
+            .row
+              h4= title
+              each row in tasks
+                a= row.nvc_notebook_name
+      .span7.offset1
+        h3.text-left
+          a Article Title 1
+        p.lead.text-left Article starts here
