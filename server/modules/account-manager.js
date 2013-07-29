@@ -5,10 +5,14 @@ var crypto = require('crypto'),
 /* login validation methods */
 
 exports.autoLogin = function (user, pass, callback) {
-  var query = "select nvc_account_name as 'user', nvc_account_password as 'pwd' from account where nvc_account_name= '" + user + "' and nvc_account_password ='" + pass + "'";
-  databaseManager.query(query, function (items) {
+  var query = "select i_account_id as '_id', nvc_account_name as 'user', nvc_account_password as 'pwd' from account where nvc_account_name= '" + user + "' and nvc_account_password ='" + pass + "'";
+  databaseManager.query(query, function (err, items) {
+    if (err){
+      throw err;
+    }
+
     if (items && items[0]) {
-      callback({user: items[0].user, pass: items[0].pwd});
+      callback({_id: items[0]._id, user: items[0].user, pass: items[0].pwd});
     } else {
       callback(null);
     }
@@ -16,15 +20,17 @@ exports.autoLogin = function (user, pass, callback) {
 };
 
 exports.manualLogin = function (user, pass, callback) {
-  var query = "select nvc_account_name as 'user', nvc_account_password as 'pwd' from account where nvc_account_name= '" + user + "'";
-  databaseManager.query(query, function (items) {
+  var query = "select i_account_id as '_id', nvc_account_name as 'user', nvc_account_password as 'pwd' from account where nvc_account_name= '" + user + "'";
+  databaseManager.query(query, function (err, items) {
+    if (err) {
+      throw err;
+    }
     if (items && items[0]) {
-      console.log(items);
       var password = items[0].pwd;
-      console.log("pass: {0}, password: {1}", pass, password);
+      //console.log("pass: {0}, password: {1}", pass, password);
       validatePassword(pass, password, function (err, res) {
         if (res) {
-          callback(null, {user: items[0].user, pass: items[0].pwd});
+          callback(null, {_id: items[0]._id, user: items[0].user, pass: items[0].pwd});
         } else {
           callback('invalid-password');
         }
@@ -41,16 +47,12 @@ exports.addNewAccount = function (newData, callback) {
   var password = newData.password;
   var description = newData.description;
   var query = "select nvc_account_name as 'user' from account where nvc_account_name= '" + user + "'";
-  /*jslint es5: true */
-  var insert = " \
-        INSERT INTO [dbo].[account] \
-       ([nvc_account_name] \
-       ,[nvc_account_description] \
-       ,[nvc_account_password]) \
-       VALUES \
-       ('" + user + "', '" + description + "', '" + password + "')";
 
-  databaseManager.query(query, function (items) {
+
+  databaseManager.query(query, function (err, items) {
+    if (err) {
+      throw err;
+    }
     if (items && items[0]) {
       callback('username-taken');
     } else {
@@ -58,7 +60,15 @@ exports.addNewAccount = function (newData, callback) {
         newData.password = hash;
         // append date stamp when record was created //
         newData.date = moment().format('MMMM Do YYYY, h:mm:ss a');
-        databaseManager.insert(insert);
+        /*jslint es5: true */
+        var insert = " \
+              INSERT INTO [dbo].[account] \
+             ([nvc_account_name] \
+             ,[nvc_account_description] \
+             ,[nvc_account_password]) \
+             VALUES \
+             ('" + user + "', '" + description + "', '" + newData.password + "')";
+        databaseManager.insert(insert, callback);
       });
     }
   });

@@ -1,5 +1,6 @@
 
-var accountManager = require('./modules/account-manager');
+var notebookManager = require('./modules/notebook-manager'),
+  accountManager = require('./modules/account-manager');
 module.exports = function (app) {
 
   //Login page
@@ -8,7 +9,9 @@ module.exports = function (app) {
     if (req.cookies && req.cookies.user && req.cookies.pass) {
       //try automatic login
       accountManager.autoLogin(req.cookies.user, req.cookies.pass, function (o) {
-        if (o !== null) {
+        console.log("o", o);
+
+        if (o) {
           req.session.user = o;
           res.redirect('/home');
         } else {
@@ -23,6 +26,7 @@ module.exports = function (app) {
   //Type in user/password and submit to login
   app.post('/', function (req, res) {
     accountManager.manualLogin(req.param('user'), req.param('pass'), function (e, o) {
+      console.log("e & o", e, o);
       if (!o) {
         res.render('login', {title: 'Account not found, please try again.' });
         //res.redirect('/home');
@@ -40,17 +44,16 @@ module.exports = function (app) {
 
   //Home page
   app.get("/home", function (req, res) {
-    if (req.session.user === null) {
+    if (!req.session.user) {
       // Use is not logged-in and redirect back to login page
       res.redirect('/');
     } else {
-      var notebooks = "select * from notebook";
-      sql.query(conn, notebooks, function (err, items) {
+      var userId = req.session.user._id;
+      notebookManager.getAvailableNotebooks(userId, function (err, items) {
         if (err) {
           throw err;
         }
 
-        console.log(items);
         res.render('index', {title: 'My Notebook', tasks: items});
       });
     }
@@ -66,8 +69,13 @@ module.exports = function (app) {
       user: req.param('user'),
       password: req.param('pass'),
       description: req.param('description')
-    }, function(e){
-      console.log(e);
+    }, function (e) {
+      //console.log(e);
+      if (e){
+        res.send(e, 400);
+      } else{
+        res.send('ok', 200);
+      }
     });
   });
 
@@ -81,7 +89,7 @@ module.exports = function (app) {
       if (err) {
         throw err;
       }
-      console.log(items);
+      //console.log(items);
       res.render('article', {title: title, author: author, content: content});
     });
   });
@@ -95,7 +103,7 @@ module.exports = function (app) {
         throw err;
       }
 
-      console.log(items);
+      //console.log(items);
       res.render('settings', {title: title, tasks: items});
     });
   });
@@ -109,7 +117,7 @@ module.exports = function (app) {
         throw err;
       }
 
-      console.log(items);
+      //console.log(items);
       res.render('writer', {title: title, tasks: items});
     });
   });

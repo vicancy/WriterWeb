@@ -7,31 +7,18 @@ nconf.env()
 
 var conn = nconf.get("SQL_CONN");
 
+//callback(err, items)
 exports.query = function (query, callback) {
-  console.log(query);
+  //console.log(query);
   sql.query(conn, query, function (err, items) {
-    if (err) {
-      throw err;
-    }
-    if (items) {
-      callback(items);
-    } else {
-      callback(null);
-    }
+    callback(err, items);
   });
 };
 
+//callback(err)
 exports.insert = function (query, callback) {
-  console.log(query);
+  //console.log(query);
   sql.query(conn, query, function (err, items) {
-    if (err) {
-      throw err;
-    }
-    console.log(items);
-    if (items) {
-      callback(items);
-    } else {
-      callback(null);
-    }
+    callback(err);
   });
 };
