@@ -5,7 +5,17 @@ html
     meta(http-equiv='X-UA-Compatible', content='IE=10')
     link(rel='stylesheet', href='/stylesheets/style.css')
     link(rel='stylesheet', href='/vendor/bootstrap.min.css')
+    script(src='/vendor/jquery.min.js')
+    script(src='/vendor/jquery.form.js')
+    script(src='/vendor/bootstrap-modal.js')
+    script(src='/vendor/bootstrap-transition.js')
   body(class='app')
+
+    // preset form values if we receive a userdata object //
+    - user = typeof(user) != 'undefined' ? user : { }
+    // store the userId on the client side in a hidden input field //
+    input(type='hidden', value= user._id)#userId
+
     div(class='navbar navbar-fixed-top navbar-inverse')
       .navbar-inner
         .container-fluid
@@ -14,11 +24,12 @@ html
             .span(class='icon-bar')
             .span(class='icon-bar')
           a(class='brand', href='/') Write Everywhere
-
           div(class="nav-collapse collapse")
             p(class="navbar-text pull-right")
-              |Hello,
-              a(href="/Settings",class="navbar-link") Vicancy
+              if user != null
+                |Hello,
+                a(href="/Settings",class="navbar-link") #{user.user}
+                a(href="/SignOut",class="navbar-link")   Sign Out
             ul(class="nav")
               li(class="active")
                 a(href="/") Home

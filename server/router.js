@@ -1,6 +1,7 @@
 
 var notebookManager = require('./modules/notebook-manager'),
   accountManager = require('./modules/account-manager');
+
 module.exports = function (app) {
 
   //Login page
@@ -9,8 +10,6 @@ module.exports = function (app) {
     if (req.cookies && req.cookies.user && req.cookies.pass) {
       //try automatic login
       accountManager.autoLogin(req.cookies.user, req.cookies.pass, function (o) {
-        console.log("o", o);
-
         if (o) {
           req.session.user = o;
           res.redirect('/home');
@@ -26,7 +25,6 @@ module.exports = function (app) {
   //Type in user/password and submit to login
   app.post('/', function (req, res) {
     accountManager.manualLogin(req.param('user'), req.param('pass'), function (e, o) {
-      console.log("e & o", e, o);
       if (!o) {
         res.render('login', {title: 'Account not found, please try again.' });
         //res.redirect('/home');
@@ -37,7 +35,8 @@ module.exports = function (app) {
           res.cookie('pass', o.pass, {maxAge: 900000 });
         }
 
-        res.send(o, 200);
+        res.redirect('/home');
+        //res.send(o, 200);
       }
     });
   });
@@ -49,12 +48,27 @@ module.exports = function (app) {
       res.redirect('/');
     } else {
       var userId = req.session.user._id;
-      notebookManager.getAvailableNotebooks(userId, function (err, items) {
+      notebookManager.getTop5AvailableNotebooks(userId, function (err, items) {
+        if (err) {
+          throw err;
+        }
+        res.render('index', {title: 'My Notebook', user: req.session.user, tasks: items});
+      });
+    }
+  });
+
+  app.get("/article-list", function (req, res) {
+    if (!req.session.user) {
+      // Use is not logged-in and redirect back to login page
+      res.send("not authenticated.");
+    } else {
+      var userId = req.session.user._id;
+      notebookManager.getTop10AvailableArticles(userId, function (err, items) {
         if (err) {
           throw err;
         }
 
-        res.render('index', {title: 'My Notebook', tasks: items});
+        res.render('article-list', {items: items});
       });
     }
   });
@@ -77,6 +91,14 @@ module.exports = function (app) {
         res.send('ok', 200);
       }
     });
+  });
+
+  //Signout
+  app.get("/signout", function (req, res) {
+    req.session.user = null;
+    res.clearCookie('user');
+    res.clearCookie('pass');
+    res.redirect('/');
   });
 
   //Article page

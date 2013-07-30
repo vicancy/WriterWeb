@@ -7,14 +7,14 @@ block content
         .container
           .row-fluid
             .row
-              h4 Vicancy
+              h4 #{user.user}
               a(href='/Settings') Edit Profile
               p.small Wrote 506 words
             .row
               h4= title
               each row in tasks
                 a= row.nvc_notebook_name
-      .span7.offset1
-        h3.text-left
-          a Article Title 1
-        p.lead.text-left Article starts here
+      .span7.offset1#article-list
+
+block scripts
+  script(src='/js/views/index.js')
