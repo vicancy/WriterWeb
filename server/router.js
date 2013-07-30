@@ -70,10 +70,10 @@ module.exports = function (app) {
       password: req.param('pass'),
       description: req.param('description')
     }, function (e) {
-      //console.log(e);
-      if (e){
+      console.log(e);
+      if (e) {
         res.send(e, 400);
-      } else{
+      } else {
         res.send('ok', 200);
       }
     });
