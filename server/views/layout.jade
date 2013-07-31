@@ -11,10 +11,9 @@ html
     script(src='/vendor/bootstrap-transition.js')
   body(class='app')
 
-    // preset form values if we receive a userdata object //
-    - user = typeof(user) != 'undefined' ? user : { }
     // store the userId on the client side in a hidden input field //
-    input(type='hidden', value= user._id)#userId
+    if user != null
+      input(type='hidden', value= user._id)#userId
 
     div(class='navbar navbar-fixed-top navbar-inverse')
       .navbar-inner

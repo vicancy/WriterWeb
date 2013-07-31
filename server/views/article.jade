@@ -1,7 +1,11 @@
 extends layout
 
 block content
-  .container
-    h3= title
-    p.small= author
-    p= content
+  h3.text-left= title
+  p.lead.text-left= content
+  ul.inline
+    li
+      |NoteBook:
+      a= notebook
+    li.right
+      p.small Last Modified Time: #{lastUpdatedDate}

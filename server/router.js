@@ -101,21 +101,6 @@ module.exports = function (app) {
     res.redirect('/');
   });
 
-  //Article page
-  app.get("/article", function (req, res) {
-    var string = "select * from article";
-    var title = "Article Title";
-    var author = "vicancy";
-    var content = "Article content here";
-    sql.query(conn, string, function (err, items) {
-      if (err) {
-        throw err;
-      }
-      //console.log(items);
-      res.render('article', {title: title, author: author, content: content});
-    });
-  });
-
   //Settings page
   app.get("/settings", function (req, res) {
     var notebooks = "select * from account";
@@ -141,6 +126,30 @@ module.exports = function (app) {
 
       //console.log(items);
       res.render('writer', {title: title, tasks: items});
+    });
+  });
+
+  //Detailed article page
+  app.get('/articles/:title', function (req, res) {
+    var title = req.params.title;
+    notebookManager.getArticleContentByAddress(title, function (err, items) {
+      if (err) {
+        throw err;
+      }
+
+      var user = typeof(req.session.user) == 'undefined' ? null : req.session.user;
+      if (items.length == 0) {
+          res.render('NotFound', { title: 'Article Not Found!', user: user});
+      } else {
+        res.render('article',
+        {
+          user: user,
+          title: items[0].Title,
+          content: items[0].Content,
+          lastUpdatedDate: items[0].LastUpdatedDate,
+          notebook: items[0].NotebookName
+        });
+      }
     });
   });
 };
