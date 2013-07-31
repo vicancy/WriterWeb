@@ -16,7 +16,7 @@ app.use(express.bodyParser());
 app.use(express.cookieParser()); // In order to use req.session.someProperty
 app.use(express.session({ secret: 'super-duper-secret-secret' }));
 app.use(app.router);
-app.use(require('stylus').middleware({ src: __dirname + 'public' }));
+//app.use(require('stylus').middleware({ src: __dirname + 'public' }));
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.configure('development', function () {
