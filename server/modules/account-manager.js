@@ -74,6 +74,26 @@ exports.addNewAccount = function (newData, callback) {
   });
 };
 
+
+//callback(err, account)
+exports.getUserInfo = function (userId, callback) {
+  /*jslint es5: true */
+  var query = "select i_account_id as '_id', \
+  nvc_account_name as 'user' \
+  from account where i_account_id = " + userId;
+  console.log("account-manager.js L81 : ", query);
+  databaseManager.query(query, function (err, items) {
+    if (items.length > 1) {
+      err = "More than one user when userId = " + userId;
+    } else if (items.length < 1) {
+      err = "User not exists when userId = " + userId;
+    }
+
+    console.log("account-manager.js L89 ", items);
+    callback(err, items);
+  });
+}
+
 exports.updateAccount = function(newData, callback)
 {
 }

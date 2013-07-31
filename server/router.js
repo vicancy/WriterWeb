@@ -103,16 +103,19 @@ module.exports = function (app) {
 
   //Settings page
   app.get("/settings", function (req, res) {
-    var notebooks = "select * from account";
-    var title = "Settings";
-    sql.query(conn, notebooks, function (err, items) {
-      if (err) {
-        throw err;
-      }
+    if (!req.session.user) {
+      // Use is not logged-in and redirect back to login page
+      res.redirect('/');
+    } else {
+      var userId = req.session.user._id;
+      accountManager.getUserInfo(userId, function (err, items) {
+        if (err) {
+          throw err;
+        }
 
-      //console.log(items);
-      res.render('settings', {title: title, tasks: items});
-    });
+        res.render('settings', {title: "Settings", user: items[0]});
+      });
+    }
   });
 
   //Writer page
