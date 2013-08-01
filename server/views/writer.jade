@@ -11,6 +11,12 @@ block content
       .span2.middle#article-list
         ul
           li Article 1
-          li Article 2
-      .span7.main#article-content
-        textarea Content here
+          li Article 3
+      .span4
+        textarea#article-content
+          |This is a website focusing on writing. Writers can **focus** on writing once he/she learns how to write upon markdown syntax. This is especially convenience for writing technical articles.
+      .span4#article-preview
+
+block scripts
+  script(src='/vendor/marked.js')
+  script(src='/js/views/writer.js')

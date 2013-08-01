@@ -6,3 +6,8 @@ body {
 a {
   color: #00B7FF;
 }
+
+#article-content {
+  width: 100%;
+  min-height: 600px;
+}
