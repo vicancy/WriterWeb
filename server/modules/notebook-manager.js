@@ -9,6 +9,14 @@ exports.getTop5AvailableNotebooks = function (userId, callback) {
   });
 };
 
+//callback(err, notebooks)
+exports.getAvailableNotebooks = function (userId, callback) {
+  var query = "select i_notebook_id as '_id', nvc_notebook_name as 'name', nvc_notebook_description as 'description' from notebook where i_account_id = " + userId + " order by i_article_count desc";
+  console.log("notebook-manager.js L15 ", query);
+  databaseManager.query(query, function (err, items) {
+    callback(err, items);
+  });
+};
 
 //callback(err, articles)
 exports.getTop10AvailableArticles = function (userId, callback) {
@@ -36,7 +44,8 @@ exports.getTop10AvailableArticles = function (userId, callback) {
 };
 
 //callback(err, article)
-exports.getArticleContent = function (articleId) {
+exports.getArticleContent = function (articleId, callback) {
+  /*jslint es5: true */
   var query = "select a.i_article_id as '_id', \
   a.nvc_unique_address as 'Address', \
   nb.i_account_id as 'UserId', \
@@ -62,6 +71,7 @@ exports.getArticleContent = function (articleId) {
 
 //callback(err, article)
 exports.getArticleContentByAddress = function (address, callback) {
+  /*jslint es5: true */
   var query = "select a.i_article_id as '_id', \
   a.nvc_unique_address as 'Address', \
   nb.i_account_id as 'UserId', \
@@ -77,7 +87,7 @@ exports.getArticleContentByAddress = function (address, callback) {
   on a.i_notebook_id = nb.i_notebook_id \
   join article_version av \
   on a.i_latest_version_id = av.i_version_id and a.i_article_id = av.i_article_id \
-  where a.nvc_unique_address = '" + address +"'";
+  where a.nvc_unique_address = '" + address + "'";
   console.log("notebook-manager.jsL82", query);
   databaseManager.query(query, function (err, items) {
     if (items.length > 1) {
@@ -86,5 +96,4 @@ exports.getArticleContentByAddress = function (address, callback) {
     console.log("notebook-manager.js L86 ", items);
     callback(err, items);
   });
-}
-
+};

@@ -31,8 +31,9 @@ module.exports = function (app) {
       } else {
         req.session.user = o;
         if (req.param('remember-me') === 'true') {
-          res.cookie('user', o.user, {maxAge: 900000 });
-          res.cookie('pass', o.pass, {maxAge: 900000 });
+          var hour = 3600000;
+          res.cookie('user', o.user, {maxAge: 14 * 24 * hour }); // keep for 2 weeks
+          res.cookie('pass', o.pass, {maxAge: 14 * 24 * hour });
         }
 
         res.redirect('/home');
@@ -120,16 +121,23 @@ module.exports = function (app) {
 
   //Writer page
   app.get("/writer", function (req, res) {
-    var notebooks = "select * from notebook";
-    var title = "Write Everywhere";
-    sql.query(conn, notebooks, function (err, items) {
-      if (err) {
-        throw err;
-      }
+    if (!req.session.user) {
+      // Use is not logged-in and redirect back to login page
+      res.redirect('/');
+    } else {
+      var userId = req.session.user._id;
+      notebookManager.getAvailableNotebooks(userId, function (err, items) {
+        if (err) {
+          throw err;
+        }
 
-      //console.log(items);
-      res.render('writer', {title: title, tasks: items});
-    });
+        res.render('writer', {
+          user: req.session.user,
+          title: "Writer's Page",
+          notebooks: items
+        });
+      });
+    }
   });
 
   //Detailed article page
@@ -155,4 +163,9 @@ module.exports = function (app) {
       }
     });
   });
+
+  app.get('/env', function (req, res) {
+    res.send(process.env);
+  });
+
 };
