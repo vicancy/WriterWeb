@@ -7,14 +7,10 @@ block content
         ul.nav.nav-list.ui-sortable
           each notebook in notebooks
             li
-              a= notebook.name
+              a(href='javascript:void(0)', onclick='loadArticles(#{notebook._id});')= notebook.name
       .span2.middle#article-list
-        ul
-          li Article 1
-          li Article 3
       .span4
         textarea#article-content
-          |This is a website focusing on writing. Writers can **focus** on writing once he/she learns how to write upon markdown syntax. This is especially convenience for writing technical articles.
       .span4#article-preview
 
 block scripts

@@ -43,6 +43,31 @@ exports.getTop10AvailableArticles = function (userId, callback) {
   });
 };
 
+//callback(err, articles)
+exports.getAvailableArticlesByNotebookId = function (userId, notebookId, callback) {
+  /*jslint es5: true */
+  var query = "select top 10 a.i_article_id as '_id', \
+  a.nvc_unique_address as 'Address', \
+  Case \
+    When a.dt_modified_datetime is null THEN convert(nvarchar(16), a.dt_inserted_datetime, 120) \
+    ELSE convert(nvarchar(16), a.dt_modified_datetime, 120) \
+  END \
+  AS 'LastUpdatedDate', \
+  nb.nvc_notebook_name as 'NotebookName', av.nvc_article_title as 'Title', \
+  av.nvc_article_abstract as 'Abstract' \
+  from article a \
+  join notebook nb \
+  on a.i_notebook_id = nb.i_notebook_id \
+  join article_version av \
+  on a.i_latest_version_id = av.i_version_id and a.i_article_id = av.i_article_id \
+  where nb.i_account_id = " + userId + " and nb.i_notebook_id = " + notebookId + " order by a.dt_modified_datetime desc";
+  console.log("notebook-manager.js L64 ", query);
+  databaseManager.query(query, function (err, items) {
+    console.log(items);
+    callback(err, items);
+  });
+};
+
 //callback(err, article)
 exports.getArticleContent = function (articleId, callback) {
   /*jslint es5: true */
@@ -64,8 +89,14 @@ exports.getArticleContent = function (articleId, callback) {
   where a.i_article_id = " + articleId;
   console.log("notebook-manager.jsL53", query);
   databaseManager.query(query, function (err, items) {
-    console.log(items);
-    callback(err, items);
+    if (items.length > 1) {
+      err = "Article is not Unique! ArticleId = " + articleId;
+    }
+    else if (items.length < 1) {
+      err = "No article exists with articleId = " + articleId;
+    }
+    console.log("notebook-manager.js L95 ", items);
+    callback(err, items[0]);
   });
 };
 
@@ -93,7 +124,8 @@ exports.getArticleContentByAddress = function (address, callback) {
     if (items.length > 1) {
       err = "Address is not Unique! Address = " + address;
     }
-    console.log("notebook-manager.js L86 ", items);
+
+    console.log("notebook-manager.js L124 ", items);
     callback(err, items);
   });
 };

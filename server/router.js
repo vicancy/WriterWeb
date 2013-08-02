@@ -74,6 +74,40 @@ module.exports = function (app) {
     }
   });
 
+  app.get("/editable-article-list", function (req, res) {
+    if (!req.session.user) {
+      // Use is not logged-in and redirect back to login page
+      res.send("not authenticated.");
+    } else {
+      var userId = req.session.user._id;
+      var notebookId = req.param('notebookId');
+      notebookManager.getAvailableArticlesByNotebookId(userId, notebookId, function (err, items) {
+        if (err) {
+          throw err;
+        }
+
+        res.render('editable-article-list', {items: items});
+      });
+    }
+  });
+
+  app.get("/editable-article", function (req, res) {
+    if (!req.session.user) {
+      // Use is not logged-in and redirect back to login page
+      res.send("not authenticated.");
+    } else {
+      var userId = req.session.user._id;
+      var articleId = req.param('articleId');
+      notebookManager.getArticleContent(articleId, function (err, item) {
+        if (err) {
+          throw err;
+        }
+
+        res.send(item.Content);
+      });
+    }
+  });
+
   //Signup page
   app.get("/signup", function (req, res) {
     res.render('signup', { title: 'Signup' });
@@ -144,6 +178,30 @@ module.exports = function (app) {
   app.get('/articles/:title', function (req, res) {
     var title = req.params.title;
     notebookManager.getArticleContentByAddress(title, function (err, items) {
+      if (err) {
+        throw err;
+      }
+
+      var user = typeof(req.session.user) == 'undefined' ? null : req.session.user;
+      if (items.length == 0) {
+          res.render('NotFound', { title: 'Article Not Found!', user: user});
+      } else {
+        res.render('article',
+        {
+          user: user,
+          title: items[0].Title,
+          content: items[0].Content,
+          lastUpdatedDate: items[0].LastUpdatedDate,
+          notebook: items[0].NotebookName
+        });
+      }
+    });
+  });
+
+  //Detailed article page
+  app.get('/articles/:id', function (req, res) {
+    var id = req.params.id
+    notebookManager.getArticleContent(id, function (err, items) {
       if (err) {
         throw err;
       }

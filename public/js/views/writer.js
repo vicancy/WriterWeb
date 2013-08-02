@@ -26,7 +26,7 @@ var delay = (function () {
   };
 })();
 
-$(document).ready(function () {
+var updatePreview = function () {
   var content_ctl = $("#article-content");
   var content = content_ctl.val();
   convertMarkdown2Html(content);
@@ -38,4 +38,29 @@ $(document).ready(function () {
       }
     }, 500);
   });
+};
+
+var loadArticles = function (notebookId) {
+  var url = "editable-article-list";
+  var data = {notebookId: notebookId};
+  $.get(url, data).success(function (res) {
+    $("#article-list").html(res);
+  });
+};
+
+var loadArticleContent = function (articleId) {
+  var url = "editable-article";
+  var data = {articleId: articleId};
+  $.get(url, data).success(function (text) {
+    $("#article-content").val(text);
+    updatePreview(); //update marked preview since the actual content is changed
+  })
+  .error(function () {
+    //How to print errors?
+  });
+};
+
+$(document).ready(function () {
+  loadArticles(1);
+  loadArticleContent(1);
 });
