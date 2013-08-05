@@ -1,6 +1,7 @@
 
 var notebookManager = require('./modules/notebook-manager'),
-  accountManager = require('./modules/account-manager');
+  accountManager = require('./modules/account-manager'),
+  cacheManager = require('./modules/cache-manager');
 
 module.exports = function (app) {
 
@@ -26,8 +27,9 @@ module.exports = function (app) {
   app.post('/', function (req, res) {
     accountManager.manualLogin(req.param('user'), req.param('pass'), function (e, o) {
       if (!o) {
-        res.render('login', {title: 'Account not found, please try again.' });
+        //res.render('login', {title: 'Account not found, please try again.' });
         //res.redirect('/home');
+        res.send(e, 400);
       } else {
         req.session.user = o;
         if (req.param('remember-me') === 'true') {
@@ -44,7 +46,9 @@ module.exports = function (app) {
 
   //Home page
   app.get("/home", function (req, res) {
+    console.log(req.session.user);
     if (!req.session.user) {
+      console.log(req.session.user);
       // Use is not logged-in and redirect back to login page
       res.redirect('/');
     } else {
@@ -98,7 +102,7 @@ module.exports = function (app) {
     } else {
       var userId = req.session.user._id;
       var articleId = req.param('articleId');
-      notebookManager.getArticleContent(articleId, function (err, item) {
+      cacheManager.getArticleContentFromCache(articleId, function (err, item) {
         if (err) {
           throw err;
         }
@@ -117,7 +121,9 @@ module.exports = function (app) {
     accountManager.addNewAccount({
       user: req.param('user'),
       password: req.param('pass'),
-      description: req.param('description')
+      description: req.param('description'),
+      nickname: req.param('name'),
+      email: req.param('email')
     }, function (e) {
       console.log(e);
       if (e) {
@@ -183,7 +189,7 @@ module.exports = function (app) {
       }
 
       var user = typeof(req.session.user) == 'undefined' ? null : req.session.user;
-      if (items.length == 0) {
+      if (items.length === 0) {
           res.render('NotFound', { title: 'Article Not Found!', user: user});
       } else {
         res.render('article',
@@ -201,7 +207,7 @@ module.exports = function (app) {
   //Detailed article page
   app.get('/articles/:id', function (req, res) {
     var id = req.params.id
-    notebookManager.getArticleContent(id, function (err, items) {
+    cacheManager.getArticleContentFromCache(id, function (err, items) {
       if (err) {
         throw err;
       }

@@ -1,4 +1,5 @@
-var databaseManager = require('./database-manager');
+var databaseManager = require('./database-manager'),
+    cacheManager = require('./cache-manager');
 
 //callback(err, notebooks)
 exports.getTop5AvailableNotebooks = function (userId, callback) {
@@ -69,7 +70,7 @@ exports.getAvailableArticlesByNotebookId = function (userId, notebookId, callbac
 };
 
 //callback(err, article)
-exports.getArticleContent = function (articleId, callback) {
+exports.getArticleContentFromDatabase = function (articleId, callback) {
   /*jslint es5: true */
   var query = "select a.i_article_id as '_id', \
   a.nvc_unique_address as 'Address', \
@@ -96,6 +97,8 @@ exports.getArticleContent = function (articleId, callback) {
       err = "No article exists with articleId = " + articleId;
     }
     console.log("notebook-manager.js L95 ", items);
+    //Save article to cache
+    cacheManager.saveArticleContentToCache(articleId, items[0]);
     callback(err, items[0]);
   });
 };
@@ -124,8 +127,18 @@ exports.getArticleContentByAddress = function (address, callback) {
     if (items.length > 1) {
       err = "Address is not Unique! Address = " + address;
     }
+    else if (items.length < 1) {
+      err = "No article exists with Address = " + address;
+    }
 
     console.log("notebook-manager.js L124 ", items);
+    //Save article to cache
+    cacheManager.saveArticleContentToCache(items[0]._id, items[0]);
     callback(err, items);
   });
 };
+
+exports.saveArticleToDatabase = function (article, callback) {
+  //If not exists, insert into the table
+  //If exists, update the article table and insert into the article revision table
+}

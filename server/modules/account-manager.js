@@ -5,7 +5,7 @@ var crypto = require('crypto'),
 /* login validation methods */
 
 exports.autoLogin = function (user, pass, callback) {
-  var query = "select i_account_id as '_id', nvc_account_name as 'user', nvc_account_password as 'pwd' from account where nvc_account_name= '" + user + "' and nvc_account_password ='" + pass + "'";
+  var query = "select i_account_id as '_id', nvc_account_name as 'user', vc_account_password as 'pwd' from account where nvc_account_name= '" + user + "' and vc_account_password ='" + pass + "'";
   databaseManager.query(query, function (err, items) {
     if (err){
       throw err;
@@ -20,7 +20,7 @@ exports.autoLogin = function (user, pass, callback) {
 };
 
 exports.manualLogin = function (user, pass, callback) {
-  var query = "select i_account_id as '_id', nvc_account_name as 'user', nvc_account_password as 'pwd' from account where nvc_account_name= '" + user + "'";
+  var query = "select i_account_id as '_id', nvc_account_name as 'user', vc_account_password as 'pwd' from account where nvc_account_name= '" + user + "'";
   databaseManager.query(query, function (err, items) {
     if (err) {
       throw err;
@@ -44,8 +44,11 @@ exports.manualLogin = function (user, pass, callback) {
 /* record insertion, update & deletion methods */
 exports.addNewAccount = function (newData, callback) {
   var user = newData.user;
-  var password = newData.password;
   var description = newData.description;
+  var email = newData.email;
+  var nickname = newData.nickname;
+  var details = '';
+  var password;
   var query = "select nvc_account_name as 'user' from account where nvc_account_name= '" + user + "'";
 
 
@@ -57,18 +60,19 @@ exports.addNewAccount = function (newData, callback) {
       callback('username-taken');
     } else {
       saltAndHash(newData.password, function (hash) {
-        newData.password = hash;
+        password = hash;
         // append date stamp when record was created //
         newData.date = moment().format('MMMM Do YYYY, h:mm:ss a');
         /*jslint es5: true */
         var insert = " \
-              INSERT INTO [dbo].[account] \
-             ([nvc_account_name] \
-             ,[nvc_account_description] \
-             ,[nvc_account_password]) \
-             VALUES \
-             ('" + user + "', '" + description + "', '" + newData.password + "')";
-        databaseManager.insert(insert, callback);
+          EXEC [public_account_add_new_account] \
+          @nvc_account_name = '" + user +
+          "', @nvc_account_description = '" + description+
+          "', @vc_account_password = '" + password +
+          "', @vc_account_email = '" + email +
+          "', @nvc_account_nickname = '" + nickname + "'";
+          //", @xml_account_details = " + details;
+        databaseManager.exec(insert, callback);
       });
     }
   });
