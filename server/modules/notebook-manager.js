@@ -3,93 +3,71 @@ var databaseManager = require('./database-manager'),
 
 //callback(err, notebooks)
 exports.getTop5AvailableNotebooks = function (userId, callback) {
-  var query = "select top 5 i_notebook_id as '_id', nvc_notebook_name as 'name', nvc_notebook_description as 'description' from notebook where i_account_id = " + userId + " order by i_article_count desc";
-  console.log("notebook-manager.jsL6", query);
-  databaseManager.query(query, function (err, items) {
+
+  var sp = "public_notebook_get_available_notebooks";
+  var params = {
+    'user_id' : userId,
+    'count' : 5
+  };
+
+  databaseManager.exec(sp, params, function (err, items) {
+    if (items.length < 1) {
+      err = "Should have at least one default notebook for user :" + userId;
+    }
+
     callback(err, items);
   });
 };
 
 //callback(err, notebooks)
 exports.getAvailableNotebooks = function (userId, callback) {
-  var query = "select i_notebook_id as '_id', nvc_notebook_name as 'name', nvc_notebook_description as 'description' from notebook where i_account_id = " + userId + " order by i_article_count desc";
-  console.log("notebook-manager.js L15 ", query);
-  databaseManager.query(query, function (err, items) {
-    callback(err, items);
+
+  var sp = "public_notebook_get_available_notebooks";
+  var params = {
+    'user_id' : userId
+  };
+
+  databaseManager.exec(sp, params, function (err, items) {
+   if (items.length < 1) {
+     err = "Should have at least one default notebook for user :" + userId;
+   }
+
+   callback(err, items);
   });
 };
 
 //callback(err, articles)
 exports.getTop10AvailableArticles = function (userId, callback) {
-  /*jslint es5: true */
-  var query = "select top 10 a.i_article_id as '_id', \
-  a.nvc_unique_address as 'Address', \
-  Case \
-    When a.dt_modified_datetime is null THEN convert(nvarchar(16), a.dt_inserted_datetime, 120) \
-    ELSE convert(nvarchar(16), a.dt_modified_datetime, 120) \
-  END \
-  AS 'LastUpdatedDate', \
-  nb.nvc_notebook_name as 'NotebookName', av.nvc_article_title as 'Title', \
-  av.nvc_article_abstract as 'Abstract' \
-  from article a \
-  join notebook nb \
-  on a.i_notebook_id = nb.i_notebook_id \
-  join article_version av \
-  on a.i_latest_version_id = av.i_version_id and a.i_article_id = av.i_article_id \
-  where nb.i_account_id = " + userId + " order by a.dt_modified_datetime desc";
-  console.log("notebook-manager.jsL30", query);
-  databaseManager.query(query, function (err, items) {
-    console.log(items);
-    callback(err, items);
-  });
+  var sp = "public_article_get_available_articles";
+  var params = {
+    'user_id' : userId,
+    'count' : 10
+  };
+
+  databaseManager.exec(sp, params, callback);
 };
 
 //callback(err, articles)
 exports.getAvailableArticlesByNotebookId = function (userId, notebookId, callback) {
-  /*jslint es5: true */
-  var query = "select top 10 a.i_article_id as '_id', \
-  a.nvc_unique_address as 'Address', \
-  Case \
-    When a.dt_modified_datetime is null THEN convert(nvarchar(16), a.dt_inserted_datetime, 120) \
-    ELSE convert(nvarchar(16), a.dt_modified_datetime, 120) \
-  END \
-  AS 'LastUpdatedDate', \
-  nb.nvc_notebook_name as 'NotebookName', av.nvc_article_title as 'Title', \
-  av.nvc_article_abstract as 'Abstract' \
-  from article a \
-  join notebook nb \
-  on a.i_notebook_id = nb.i_notebook_id \
-  join article_version av \
-  on a.i_latest_version_id = av.i_version_id and a.i_article_id = av.i_article_id \
-  where nb.i_account_id = " + userId + " and nb.i_notebook_id = " + notebookId + " order by a.dt_modified_datetime desc";
-  console.log("notebook-manager.js L64 ", query);
-  databaseManager.query(query, function (err, items) {
-    console.log(items);
-    callback(err, items);
-  });
+
+  var sp = "public_article_get_available_articles";
+  var params = {
+    'user_id' : userId,
+    'notebook_id' : notebookId
+  };
+
+  databaseManager.exec(sp, params, callback);
 };
 
 //callback(err, article)
 exports.getArticleContentFromDatabase = function (articleId, callback) {
-  /*jslint es5: true */
-  var query = "select a.i_article_id as '_id', \
-  a.nvc_unique_address as 'Address', \
-  nb.i_account_id as 'UserId', \
-  Case \
-    When a.dt_modified_datetime is null THEN convert(nvarchar(16), a.dt_inserted_datetime, 120) \
-    ELSE convert(nvarchar(16), a.dt_modified_datetime, 120) \
-  END \
-  AS 'LastUpdatedDate', \
-  nb.nvc_notebook_name as 'NotebookName', av.nvc_article_title as 'Title', \
-  av.nvc_article_content as 'Content' \
-  from article a \
-  join notebook nb \
-  on a.i_notebook_id = nb.i_notebook_id \
-  join article_version av \
-  on a.i_latest_version_id = av.i_version_id and a.i_article_id = av.i_article_id \
-  where a.i_article_id = " + articleId;
-  console.log("notebook-manager.jsL53", query);
-  databaseManager.query(query, function (err, items) {
+
+  var sp = "public_article_get_article_detail_by_id";
+  var params = {
+    'article_id' : articleId
+  };
+
+  databaseManager.exec(sp, params, function (err, items) {
     if (items.length > 1) {
       err = "Article is not Unique! ArticleId = " + articleId;
     }
@@ -104,26 +82,14 @@ exports.getArticleContentFromDatabase = function (articleId, callback) {
 };
 
 //callback(err, article)
-exports.getArticleContentByAddress = function (address, callback) {
-  /*jslint es5: true */
-  var query = "select a.i_article_id as '_id', \
-  a.nvc_unique_address as 'Address', \
-  nb.i_account_id as 'UserId', \
-  Case \
-    When a.dt_modified_datetime is null THEN convert(nvarchar(16), a.dt_inserted_datetime, 120) \
-    ELSE convert(nvarchar(16), a.dt_modified_datetime, 120) \
-  END \
-  AS 'LastUpdatedDate', \
-  nb.nvc_notebook_name as 'NotebookName', av.nvc_article_title as 'Title', \
-  av.nvc_article_content as 'Content' \
-  from article a \
-  join notebook nb \
-  on a.i_notebook_id = nb.i_notebook_id \
-  join article_version av \
-  on a.i_latest_version_id = av.i_version_id and a.i_article_id = av.i_article_id \
-  where a.nvc_unique_address = '" + address + "'";
-  console.log("notebook-manager.jsL82", query);
-  databaseManager.query(query, function (err, items) {
+exports.getArticleContentByAddressFromDatabase = function (address, callback) {
+
+  var sp = "public_article_get_article_detail_by_address";
+  var params = {
+    'nvc_unique_address' : address
+  };
+
+  databaseManager.exec(sp, params, function (err, items) {
     if (items.length > 1) {
       err = "Address is not Unique! Address = " + address;
     }
@@ -131,7 +97,7 @@ exports.getArticleContentByAddress = function (address, callback) {
       err = "No article exists with Address = " + address;
     }
 
-    console.log("notebook-manager.js L124 ", items);
+    console.log("notebook-manager.js L88 ", items);
     //Save article to cache
     cacheManager.saveArticleContentToCache(items[0]._id, items[0]);
     callback(err, items);

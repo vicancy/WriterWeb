@@ -90,7 +90,10 @@ module.exports = function (app) {
           throw err;
         }
 
-        res.render('editable-article-list', {items: items});
+        res.render('editable-article-list',
+        {
+          items: items
+        });
       });
     }
   });
@@ -170,11 +173,12 @@ module.exports = function (app) {
         if (err) {
           throw err;
         }
-
+        console.log(items[0]._id);
         res.render('writer', {
           user: req.session.user,
           title: "Writer's Page",
-          notebooks: items
+          notebooks: items,
+          selectedNotebookId: items[0]._id
         });
       });
     }
@@ -206,14 +210,14 @@ module.exports = function (app) {
 
   //Detailed article page
   app.get('/articles/:id', function (req, res) {
-    var id = req.params.id
+    var id = req.params.id;
     cacheManager.getArticleContentFromCache(id, function (err, items) {
       if (err) {
         throw err;
       }
 
       var user = typeof(req.session.user) == 'undefined' ? null : req.session.user;
-      if (items.length == 0) {
+      if (items.length === 0) {
           res.render('NotFound', { title: 'Article Not Found!', user: user});
       } else {
         res.render('article',

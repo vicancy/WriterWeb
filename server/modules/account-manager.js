@@ -63,16 +63,17 @@ exports.addNewAccount = function (newData, callback) {
         password = hash;
         // append date stamp when record was created //
         newData.date = moment().format('MMMM Do YYYY, h:mm:ss a');
-        /*jslint es5: true */
-        var insert = " \
-          EXEC [public_account_add_new_account] \
-          @nvc_account_name = '" + user +
-          "', @nvc_account_description = '" + description+
-          "', @vc_account_password = '" + password +
-          "', @vc_account_email = '" + email +
-          "', @nvc_account_nickname = '" + nickname + "'";
-          //", @xml_account_details = " + details;
-        databaseManager.exec(insert, callback);
+
+        var sp = "public_account_add_new_account";
+        var params = {
+          'nvc_account_name' : user,
+          'nvc_account_description' : description,
+          'vc_account_password' : password,
+          'vc_account_email' : email,
+          'nvc_account_nickname' : nickname
+        };
+
+        databaseManager.exec(sp, params, callback);
       });
     }
   });

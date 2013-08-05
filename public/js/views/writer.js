@@ -5,18 +5,18 @@ function convertMarkdown2Html(content) {
   // hide html
   preview.fadeOut("fast").empty();
 
-  var convertCallback = function(data,callback){
+  var convertCallback = function (data, callback) {
     preview
-    .addClass("display-none")
-    .append(data)
-    .fadeIn("fast");
+      .addClass("display-none")
+      .append(data)
+      .fadeIn("fast");
     callback();
-  }
+  };
 
   // user marked.js
   var data = marked(content);
   convertCallback(data, function () { });
-};
+}
 
 var delay = (function () {
   var timer = 0;
@@ -61,6 +61,6 @@ var loadArticleContent = function (articleId) {
 };
 
 $(document).ready(function () {
-  loadArticles(1);
-  loadArticleContent(1);
+  loadArticles($('#selectedNotebookId').val());
+  updatePreview();
 });

@@ -1,14 +1,17 @@
 extends layout
-
 block content
+  input(type='hidden', value=selectedNotebookId)#selectedNotebookId
   .container-fluid
     .row-fluid
       .span2.aside
+        a(href='javascript:void(0)') + Add Notebook
         ul.nav.nav-list.ui-sortable
           each notebook in notebooks
             li
               a(href='javascript:void(0)', onclick='loadArticles(#{notebook._id});')= notebook.name
-      .span2.middle#article-list
+      .span2.middle
+        a(href='javascript:void(0)') + Write An Article
+        div#article-list
       .span4
         textarea#article-content
       .span4#article-preview
