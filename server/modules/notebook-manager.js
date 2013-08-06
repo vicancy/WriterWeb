@@ -73,11 +73,17 @@ exports.getArticleContentFromDatabase = function (articleId, callback) {
     }
     else if (items.length < 1) {
       err = "No article exists with articleId = " + articleId;
+    } else {
+      console.log("notebook-manager.js L95 ", items);
+      //Save article to cache
+      cacheManager.saveArticleContentToCache(
+        articleId,
+        items[0],
+        function (msg) {
+          console.log("notebook-manager.js L107", msg);
+      });
+      callback(err, items[0]);
     }
-    console.log("notebook-manager.js L95 ", items);
-    //Save article to cache
-    cacheManager.saveArticleContentToCache(articleId, items[0]);
-    callback(err, items[0]);
   });
 };
 
@@ -96,15 +102,56 @@ exports.getArticleContentByAddressFromDatabase = function (address, callback) {
     else if (items.length < 1) {
       err = "No article exists with Address = " + address;
     }
-
-    console.log("notebook-manager.js L88 ", items);
-    //Save article to cache
-    cacheManager.saveArticleContentToCache(items[0]._id, items[0]);
-    callback(err, items);
+    else {
+      //Save article to cache
+      cacheManager.saveArticleContentToCacheWithAddress(
+        address,
+        items[0]._id,
+        items[0],
+        function (msg) {
+          console.log("notebook-manager.js L107", msg);
+      });
+      callback(err, items);
+    }
   });
 };
 
-exports.saveArticleToDatabase = function (article, callback) {
+//callback(err)
+exports.createArticleWithTemplate = function (userId, notebookId, template, callback) {
+  var title = "Untitled";
+
+  //return getAvailableArticlesByNotebookId
+  var sp = "public_article_add_new_article";
+  var params = {
+    'i_notebook_id' : notebookId,
+    'nvc_article_title' : "Untitled",
+    'i_account_id' : userId
+  };
+
+  databaseManager.exec(sp, params, function (err, items) {
+    //save to cache
+    for(var item in items) {
+      cacheManager.saveArticleContentToCache(
+        item.articleId,
+        item,
+        function (msg) {
+          console.log("notebook-manager.js L138", msg);
+        }
+      );
+    }
+  });
+};
+
+exports.updateArticleToDatabase = function (article, callback) {
   //If not exists, insert into the table
   //If exists, update the article table and insert into the article revision table
-}
+
+  var sp = "public_article_get_article_detail_by_address";
+  var params = {
+    'nvc_unique_address' : address
+  };
+
+  databaseManager.exec(sp, params, function (err, items) {});
+};
+
+/* private helper methods */

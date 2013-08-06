@@ -2,12 +2,21 @@ var cache = require('memory-cache'),
     idAddressMapping = require('memory-cache'),
     notebookManager = require('./notebook-manager');
 
+//callback(msg)
 exports.saveArticleContentToCache = function (articleId, article, callback) {
   cache.put(articleId, article);
 };
 
-exports.saveIdAddressMappingToCache = function (articleId, address, callback) {
+exports.updateArticle = function (articleId, markdown, html) {
+  var article = cache.get(articleId);
+  article.Content = markdown;
+  cache.put(articleId, article);
+  console.log("cache-manager.js L14 ", article);
+};
+
+exports.saveArticleContentToCacheWithAddress = function (address, articleId, article, callback) {
   idAddressMapping.put(articleId, address);
+  cache.put(articleId, article);
 };
 
 //callback(err, article)

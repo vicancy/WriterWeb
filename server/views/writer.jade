@@ -10,7 +10,7 @@ block content
             li
               a(href='javascript:void(0)', onclick='loadArticles(#{notebook._id});')= notebook.name
       .span2.middle
-        a(href='javascript:void(0)') + Write An Article
+        a(href='javascript:void(0)', onclick='newArticle(#{selectedNotebookId})') + Write An Article
         div#article-list
       .span4
         textarea#article-content

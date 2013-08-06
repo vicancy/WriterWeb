@@ -57,7 +57,10 @@ module.exports = function (app) {
         if (err) {
           throw err;
         }
-        res.render('index', {title: 'My Notebook', user: req.session.user, tasks: items});
+
+        if (items) {
+          res.render('index', {title: 'My Notebook', user: req.session.user, tasks: items});
+        }
       });
     }
   });
@@ -72,11 +75,13 @@ module.exports = function (app) {
         if (err) {
           throw err;
         }
-
-        res.render('article-list', {items: items});
+        if (items) {
+          res.render('article-list', {items: items});
+        }
       });
     }
   });
+
 
   app.get("/editable-article-list", function (req, res) {
     if (!req.session.user) {
@@ -85,16 +90,36 @@ module.exports = function (app) {
     } else {
       var userId = req.session.user._id;
       var notebookId = req.param('notebookId');
-      notebookManager.getAvailableArticlesByNotebookId(userId, notebookId, function (err, items) {
-        if (err) {
-          throw err;
-        }
+      var action = req.param('action');
+      if (action && action === 'create') {
+        notebookManager.createArticleWithTemplate(userId, notebookId, null, function (err, items) {
+          if (err) {
+            throw err;
+          }
 
-        res.render('editable-article-list',
-        {
-          items: items
+          if (items) {
+            res.render('editable-article-list',
+            {
+              items: items,
+              selectedArticleId: items[0]._id
+            });
+          }
         });
-      });
+      } else {
+        notebookManager.getAvailableArticlesByNotebookId(userId, notebookId, function (err, items) {
+          if (err) {
+            throw err;
+          }
+
+          if (items) {
+            res.render('editable-article-list',
+            {
+              items: items,
+              selectedArticleId: items[0]._id
+            });
+          }
+        });
+      }
     }
   });
 
@@ -105,13 +130,18 @@ module.exports = function (app) {
     } else {
       var userId = req.session.user._id;
       var articleId = req.param('articleId');
-      cacheManager.getArticleContentFromCache(articleId, function (err, item) {
-        if (err) {
-          throw err;
-        }
+      var action = req.param('action');
+      if (action && action === 'create') {
 
-        res.send(item.Content);
-      });
+      } else {
+        cacheManager.getArticleContentFromCache(articleId, function (err, item) {
+          if (err) {
+            throw err;
+          }
+
+          res.send(item.Content);
+        });
+      }
     }
   });
 
@@ -182,6 +212,15 @@ module.exports = function (app) {
         });
       });
     }
+  });
+
+  //Save article to database
+  app.post("/writer", function (req, res) {
+    var articleId = req.param('article');
+    var markdown = req.param('markdown');
+    var html = req.param('html');
+    console.log(articleId, markdown, html);
+    cacheManager.updateArticle(articleId, markdown, html);
   });
 
   //Detailed article page
