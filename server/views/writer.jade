@@ -8,7 +8,7 @@ block content
         ul.nav.nav-list.ui-sortable
           each notebook in notebooks
             li
-              a(href='javascript:void(0)', onclick='loadArticles(#{notebook._id});')= notebook.name
+              a(href='javascript:void(0)', onclick='setArticleSelected(#{notebook._id});loadArticles(#{notebook._id});')= notebook.name
       .span2.middle
         a(href='javascript:void(0)', onclick='newArticle(#{selectedNotebookId})') + Write An Article
         div#article-list

@@ -57,7 +57,7 @@ var updatePreview = function () {
   saveContent({
     article : $("#selectedArticleId").val(),
     markdown : $("#article-content").val(),
-    html : $("#article-preview").val()
+    html : $("#article-preview").html()
   });
 };
 
@@ -73,17 +73,30 @@ var loadArticles = function (notebookId, action) {
   });
 };
 
+var setArticleSelected = function (articleId) {
+  $("#selectedArticleId").val(articleId);
+};
+
+var setNotebookSelected = function (notebookId) {
+  $("#selectedNotebookId").val(notebookId);
+};
+
 var loadArticleContent = function (articleId, action) {
+  var preview = $("#article-preview");
+  // hide html
+  preview.fadeOut("fast").empty();
+
   var url = "editable-article";
   var data = {
     articleId: articleId,
     action: action
   };
-  $.get(url, data).success(function (text) {
-    $("#article-content").val(text);
-    updatePreview(); //update marked preview since the actual content is changed
+  $.get(url, data).success(function (params) {
+    $("#article-content").val(params.markdown);
+    $("#article-preview").append(params.html).fadeIn('fast');
+    //updatePreview(); //this line makes each click a post request, comment out
   })
-  .error(function () {
+  .error(function (err) {
     //How to print errors?
   });
 };
@@ -100,5 +113,4 @@ var newArticle = function (notebookId) {
 $(document).ready(function () {
   loadArticles($('#selectedNotebookId').val());
   initPreviewPanel();
-  updatePreview();
 });

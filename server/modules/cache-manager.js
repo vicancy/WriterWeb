@@ -5,13 +5,22 @@ var cache = require('memory-cache'),
 //callback(msg)
 exports.saveArticleContentToCache = function (articleId, article, callback) {
   cache.put(articleId, article);
+  console.log("cache-manager.js L8 ", article);
 };
 
-exports.updateArticle = function (articleId, markdown, html) {
-  var article = cache.get(articleId);
-  article.Content = markdown;
-  cache.put(articleId, article);
-  console.log("cache-manager.js L14 ", article);
+/*
+  var params = {
+    articleId : req.param('article'),
+    markdown : req.param('markdown'),
+    html : req.param('html')
+  };
+*/
+exports.updateArticle = function (params, callback) {
+  var article = cache.get(params.articleId);
+  article.Content = params.markdown;
+  article.Preview = params.html;
+  cache.put(params.articleId, article);
+  callback(null);
 };
 
 exports.saveArticleContentToCacheWithAddress = function (address, articleId, article, callback) {
@@ -22,8 +31,8 @@ exports.saveArticleContentToCacheWithAddress = function (address, articleId, art
 //callback(err, article)
 exports.getArticleContentFromCache = function (articleId, callback) {
   var article = cache.get(articleId);
+  console.log("cache-manager.js L26 ", article);
   if (article) {
-    console.log("cache-manager.js L13 ", article);
     callback(null, article);
   } else {
     notebookManager.getArticleContentFromDatabase(articleId, callback);

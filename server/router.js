@@ -96,7 +96,7 @@ module.exports = function (app) {
           if (err) {
             throw err;
           }
-
+          console.log(items);
           if (items) {
             res.render('editable-article-list',
             {
@@ -138,8 +138,16 @@ module.exports = function (app) {
           if (err) {
             throw err;
           }
-
-          res.send(item.Content);
+          console.log(item);
+          if (item) {
+            res.send(
+              {
+                markdown :item.Content,
+                html : item.Preview
+              });
+          } else {
+            res.send(200);
+          }
         });
       }
     }
@@ -216,11 +224,18 @@ module.exports = function (app) {
 
   //Save article to database
   app.post("/writer", function (req, res) {
-    var articleId = req.param('article');
-    var markdown = req.param('markdown');
-    var html = req.param('html');
-    console.log(articleId, markdown, html);
-    cacheManager.updateArticle(articleId, markdown, html);
+    var params = {
+      articleId : req.param('article'),
+      markdown : req.param('markdown'),
+      html : req.param('html')
+    };
+    cacheManager.updateArticle(params, function (e) {
+      if (e) {
+        res.send(e, 400);
+      } else {
+        res.send('ok', 200);
+      }
+    });
   });
 
   //Detailed article page
@@ -265,7 +280,7 @@ module.exports = function (app) {
           title: items[0].Title,
           content: items[0].Content,
           lastUpdatedDate: items[0].LastUpdatedDate,
-          notebook: items[0].NotebookName
+          notebook: items[0].NotebookName,
         });
       }
     });

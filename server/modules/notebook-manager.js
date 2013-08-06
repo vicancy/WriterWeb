@@ -130,15 +130,14 @@ exports.createArticleWithTemplate = function (userId, notebookId, template, call
 
   databaseManager.exec(sp, params, function (err, items) {
     //save to cache
+    console.log(items);
     for(var item in items) {
+      console.log(item);
       cacheManager.saveArticleContentToCache(
         item.articleId,
-        item,
-        function (msg) {
-          console.log("notebook-manager.js L138", msg);
-        }
-      );
+        item);
     }
+    callback(err, items);
   });
 };
 

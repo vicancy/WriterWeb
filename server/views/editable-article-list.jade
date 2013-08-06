@@ -3,6 +3,6 @@ input(type='hidden', value=selectedArticleId)#selectedArticleId
 ul
   each item in items
     li
-      a(href='javascript:void(0)', onclick='loadArticleContent(#{item._id});') #{item.Title}
+      a(href='javascript:void(0)', onclick='setArticleSelected(#{item._id});loadArticleContent(#{item._id});') #{item.Title}
       p #{item.Abstract}
       hr
