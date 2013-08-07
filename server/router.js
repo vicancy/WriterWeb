@@ -259,7 +259,7 @@ module.exports = function (app) {
         {
           user: user,
           title: article.Title,
-          content: article.Content,
+          content: article.Preview,
           lastUpdatedDate: article.LastUpdatedDate,
           notebook: article.NotebookName
         });
