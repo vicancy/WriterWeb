@@ -48,12 +48,12 @@ exports.getTop10AvailableArticles = function (userId, callback) {
 };
 
 //callback(err, articles)
-exports.getAvailableArticlesByNotebookId = function (userId, notebookId, callback) {
+exports.getAvailableArticlesByNotebookIdFromDatabase = function (parameters, callback) {
 
   var sp = "public_article_get_available_articles";
   var params = {
-    'user_id' : userId,
-    'notebook_id' : notebookId
+    'user_id' : parameters.userId,
+    'notebook_id' : parameters.notebookId
   };
 
   databaseManager.exec(sp, params, callback);
@@ -73,17 +73,10 @@ exports.getArticleContentFromDatabase = function (articleId, callback) {
     }
     else if (items.length < 1) {
       err = "No article exists with articleId = " + articleId;
-    } else {
-      console.log("notebook-manager.js L95 ", items);
-      //Save article to cache
-      cacheManager.saveArticleContentToCache(
-        articleId,
-        items[0],
-        function (msg) {
-          console.log("notebook-manager.js L107", msg);
-      });
-      callback(err, items[0]);
     }
+
+    callback(err, items[0]);
+
   });
 };
 
@@ -102,43 +95,25 @@ exports.getArticleContentByAddressFromDatabase = function (address, callback) {
     else if (items.length < 1) {
       err = "No article exists with Address = " + address;
     }
-    else {
-      //Save article to cache
-      cacheManager.saveArticleContentToCacheWithAddress(
-        address,
-        items[0]._id,
-        items[0],
-        function (msg) {
-          console.log("notebook-manager.js L107", msg);
-      });
-      callback(err, items);
-    }
+
+    callback(err, items[0]);
+
   });
 };
 
 //callback(err)
-exports.createArticleWithTemplate = function (userId, notebookId, template, callback) {
+exports.createArticleWithTemplateToDatabase = function (params, callback) {
   var title = "Untitled";
 
   //return getAvailableArticlesByNotebookId
   var sp = "public_article_add_new_article";
-  var params = {
-    'i_notebook_id' : notebookId,
+  var parameters = {
+    'i_notebook_id' : params.notebookId,
     'nvc_article_title' : "Untitled",
-    'i_account_id' : userId
+    'i_account_id' : params.userId
   };
 
-  databaseManager.exec(sp, params, function (err, items) {
-    //save to cache
-    console.log(items);
-    for(var item in items) {
-      console.log(item);
-      cacheManager.saveArticleContentToCache(
-        item.articleId,
-        item);
-    }
-    callback(err, items);
-  });
+  databaseManager.exec(sp, parameters, callback);
 };
 
 exports.updateArticleToDatabase = function (article, callback) {

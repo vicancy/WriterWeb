@@ -88,11 +88,13 @@ module.exports = function (app) {
       // Use is not logged-in and redirect back to login page
       res.send("not authenticated.");
     } else {
-      var userId = req.session.user._id;
-      var notebookId = req.param('notebookId');
-      var action = req.param('action');
+      var params = {
+        userId : req.session.user._id,
+        notebookId : req.param('notebookId'),
+        action : req.param('action')
+      };
       if (action && action === 'create') {
-        notebookManager.createArticleWithTemplate(userId, notebookId, null, function (err, items) {
+        cacheManager.createArticleWithTemplate(params, function (err, items) {
           if (err) {
             throw err;
           }
@@ -106,7 +108,7 @@ module.exports = function (app) {
           }
         });
       } else {
-        notebookManager.getAvailableArticlesByNotebookId(userId, notebookId, function (err, items) {
+        notebookManager.getAvailableArticlesByNotebookIdFromDatabase(params, function (err, items) {
           if (err) {
             throw err;
           }
@@ -134,7 +136,7 @@ module.exports = function (app) {
       if (action && action === 'create') {
 
       } else {
-        cacheManager.getArticleContentFromCache(articleId, function (err, item) {
+        cacheManager.getArticleContent(articleId, function (err, item) {
           if (err) {
             throw err;
           }
@@ -241,23 +243,23 @@ module.exports = function (app) {
   //Detailed article page
   app.get('/articles/:title', function (req, res) {
     var title = req.params.title;
-    notebookManager.getArticleContentByAddress(title, function (err, items) {
+    cacheManager.getArticleContentByAddress(title, function (err, article) {
       if (err) {
         throw err;
       }
 
       var user = typeof(req.session.user) == 'undefined' ? null : req.session.user;
-      if (items.length === 0) {
-          res.render('NotFound', { title: 'Article Not Found!', user: user});
-      } else {
+      if (article) {
         res.render('article',
         {
           user: user,
-          title: items[0].Title,
-          content: items[0].Content,
-          lastUpdatedDate: items[0].LastUpdatedDate,
-          notebook: items[0].NotebookName
+          title: article.Title,
+          content: article.Content,
+          lastUpdatedDate: article.LastUpdatedDate,
+          notebook: article.NotebookName
         });
+      } else {
+        res.render('NotFound', { title: 'Article Not Found!', user: user});
       }
     });
   });
@@ -265,7 +267,7 @@ module.exports = function (app) {
   //Detailed article page
   app.get('/articles/:id', function (req, res) {
     var id = req.params.id;
-    cacheManager.getArticleContentFromCache(id, function (err, items) {
+    cacheManager.getArticleContent(id, function (err, items) {
       if (err) {
         throw err;
       }
