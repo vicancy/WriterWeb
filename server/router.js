@@ -66,6 +66,7 @@ module.exports = function (app) {
   });
 
   app.get("/article-list", function (req, res) {
+    console.log(req.session);
     if (!req.session.user) {
       // Use is not logged-in and redirect back to login page
       res.send("not authenticated.");
@@ -84,6 +85,8 @@ module.exports = function (app) {
 
 
   app.get("/editable-article-list", function (req, res) {
+    console.log(req.session);
+    console.log(req.session.user);
     if (!req.session.user) {
       // Use is not logged-in and redirect back to login page
       res.send("not authenticated.");
@@ -93,7 +96,7 @@ module.exports = function (app) {
         notebookId : req.param('notebookId'),
         action : req.param('action')
       };
-      if (action && action === 'create') {
+      if (params.action && params.action === 'create') {
         cacheManager.createArticleWithTemplate(params, function (err, items) {
           if (err) {
             throw err;
@@ -241,7 +244,9 @@ module.exports = function (app) {
   });
 
   //Detailed article page
+  //One Extension of chrome always require jquery.ui.min.css, disable the chrome extension to avoid influencing this router
   app.get('/articles/:title', function (req, res) {
+    console.log(req.params);
     var title = req.params.title;
     cacheManager.getArticleContentByAddress(title, function (err, article) {
       if (err) {

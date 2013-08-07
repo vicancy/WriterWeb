@@ -13,7 +13,6 @@ app.use(express.favicon("public/images/favicon.ico"));
 app.use(express.logger('dev'));
 app.use(express.bodyParser());
 app.use(express.methodOverride());
-app.use(express.bodyParser());
 app.use(express.cookieParser()); // In order to use req.session.someProperty
 app.use(express.session({ secret: 'super-duper-secret-secret' }));
 app.use(app.router);

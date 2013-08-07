@@ -116,7 +116,10 @@ exports.createArticleWithTemplate = function (params, callback) {
 
     if (items) {
       for (var item in items) {
-        saveArticleContentToCache(item.articleId, item);
+        saveArticleContentToCache({
+            articleId : item.articleId,
+            article : item
+          });
       }
     }
 
