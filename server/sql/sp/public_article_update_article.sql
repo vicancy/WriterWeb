@@ -1,6 +1,6 @@
 USE [WriterController]
 GO
-/****** Object:  StoredProcedure [dbo].[public_article_update_article]    Script Date: 8/7/2013 8:30:28 PM ******/
+/****** Object:  StoredProcedure [dbo].[public_article_update_article]    Script Date: 8/7/2013 8:40:40 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -85,7 +85,8 @@ BEGIN
         ,[dt_inserted_by_datetime]
         ,[nvc_article_title]
         ,[nvc_article_abstract]
-        ,[nvc_article_content])
+        ,[nvc_article_content]
+        ,[nvc_article_preview])
       VALUES
         (@i_article_id
         ,@curVersion
@@ -94,6 +95,7 @@ BEGIN
         ,@nvc_article_title
         ,@nvc_article_abstract
         ,@nvc_article_content
+        ,@nvc_article_preview
         )
 
     UPDATE [dbo].[article]
