@@ -72,7 +72,7 @@ module.exports = function (app) {
       res.send("not authenticated.");
     } else {
       var userId = req.session.user._id;
-      notebookManager.getTop10AvailableArticles(userId, function (err, items) {
+      cacheManager.getTop10AvailableArticles(userId, function (err, items) {
         if (err) {
           throw err;
         }

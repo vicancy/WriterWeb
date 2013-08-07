@@ -37,7 +37,7 @@ exports.getAvailableNotebooks = function (userId, callback) {
 };
 
 //callback(err, articles)
-exports.getTop10AvailableArticles = function (userId, callback) {
+exports.getTop10AvailableArticlesFromDatabase = function (userId, callback) {
   var sp = "public_article_get_available_articles";
   var params = {
     'user_id' : userId,
@@ -120,12 +120,32 @@ exports.updateArticleToDatabase = function (article, callback) {
   //If not exists, insert into the table
   //If exists, update the article table and insert into the article revision table
 
-  var sp = "public_article_get_article_detail_by_address";
+  var sp = "public_article_update_article";
   var params = {
-    'nvc_unique_address' : address
+    'i_article_id' : article._id,
+    'i_modified_by_account_id' : article.UserId,
+    'nvc_article_title' : article.Title,
+    'nvc_article_abstract' : article.Abstract,
+    'nvc_article_content' : article.Content,
+    'nvc_article_preview' : article.Preview,
+    'i_notebook_id' : article.NotebookId
   };
 
-  databaseManager.exec(sp, params, function (err, items) {});
+  databaseManager.exec(sp, params, callback);
+};
+
+//return abstract
+exports.getAbstractFromContent = function (content) {
+  var abstract;
+  if (typeof(content) !== 'string') {
+    abstract = '';
+  } else if (content.length < 200) {
+    abstract = content;
+  } else {
+    abstract = content.substring(0, 200);
+  }
+
+  return abstract;
 };
 
 /* private helper methods */

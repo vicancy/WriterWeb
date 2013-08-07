@@ -1,9 +1,11 @@
 var express = require("express"),
   http = require('http'),
   tty = require('tty'),
-  path = require('path');
+  path = require('path'),
+  cache = require('./server/modules/cache-manager');
 
 var app = express();
+function now() { return (new Date()).getTime(); }
 
 // all environments
 app.set('port', process.env.PORT || 3000);
@@ -30,7 +32,21 @@ app.configure('production', function () {
 
 require('./server/router')(app);
 
+var lastUpdateTime = now();
+
+//Update cache to database every 1 minute
+var timer = function () {
+  setInterval(function () {
+    cache.saveCacheToDatabase(lastUpdateTime, function(){
+      console.log(lastUpdateTime, " saved to database", now());
+      lastUpdateTime = now();
+    });
+  }, 60000);
+};
+
+
 http.createServer(app).listen(app.get('port'), function () {
+  timer();
   console.log('Express server listening on port ' + app.get('port'));
 });
 
