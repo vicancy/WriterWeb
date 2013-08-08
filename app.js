@@ -34,14 +34,13 @@ require('./server/router')(app);
 
 var lastUpdateTime = now();
 
-//Update cache to database every 1 minute
+//Update cache to database every 30 minute
 var timer = function () {
   setInterval(function () {
     cache.saveCacheToDatabase(lastUpdateTime, function(){
-      console.log(lastUpdateTime, " saved to database", now());
       lastUpdateTime = now();
     });
-  }, 60000);
+  }, 60000 * 30);
 };
 
 

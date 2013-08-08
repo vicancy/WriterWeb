@@ -18,10 +18,13 @@ var saveArticleContentToCache = function (params, callback) {
   if (!params.articleId) throw "Invalid ArticleId";
   var id = parseInt(params.articleId);
   if (!params.article.Address) throw "Should NOT " + params.article.Address;
-  idAddressMapping.put(params.article.Address, id);
+  if (params.action && params.action === 'update') {
+    idAddressMapping.put(params.article.Address, id);
+  }
   cache.put(id, params.article);
   //Put current timestamp into cache
   articleTimeStamp.put(id, now());
+  if (callback) callback(null);
 };
 
 exports.saveArticleContentToCache = saveArticleContentToCache;
@@ -43,7 +46,8 @@ exports.updateArticle = function (params, callback) {
     console.log("have changes, updating ", article);
     saveArticleContentToCache({
       articleId : params.articleId,
-      article : article
+      article : article,
+      action : 'update'
     }, callback);
   }
 };
@@ -79,7 +83,8 @@ exports.getArticleContent = function (articleId, callback) {
       if (item) {
         saveArticleContentToCache({
           articleId : articleId,
-          article : item
+          article : item,
+          action : 'get'
         });
       }
 
@@ -106,7 +111,8 @@ exports.getArticleContentByAddress = function (address, callback) {
         if (item) {
           saveArticleContentToCache({
             articleId : articleId,
-            article : item
+            article : item,
+            action : 'get'
           });
         }
 
@@ -123,7 +129,8 @@ exports.getArticleContentByAddress = function (address, callback) {
         if (item) {
           saveArticleContentToCache({
             articleId : item._id,
-            article : item
+            article : item,
+            action : 'get'
           });
         }
 
@@ -143,7 +150,8 @@ exports.createArticleWithTemplate = function (params, callback) {
       for (var item in items) {
         saveArticleContentToCache({
             articleId : item._id,
-            article : item
+            article : item,
+            action : 'get'
           });
       }
     }
@@ -170,14 +178,15 @@ exports.saveCacheToDatabase = function (lastUpdateTime, callback) {
   if (cache.size() > 0) {
     for (var key in cache.items()) {
       var item = cache.get(key);
-      console.log(lastUpdateTime, ' compare to ', articleTimeStamp.get(key));
-      if (lastUpdateTime < articleTimeStamp.get(key)) {
+      var timeStamp = articleTimeStamp.get(key);
+      console.log('lastUpdateTime : ', lastUpdateTime, "compare to article's cached time stamp : ", timeStamp);
+      if (lastUpdateTime < timeStamp) {
         console.log("notebookManager.updateArticleToDatabase ", item);
         notebookManager.updateArticleToDatabase(item, function () {
-
-          console.log("success");
+          console.log((new Date()).toTimeString(), " saved to database ");
+          console.log("updating articleTimeStamp from timeStamp = ", timeStamp, " to lastUpdateTime = ", lastUpdateTime);
+          articleTimeStamp.put(key, lastUpdateTime);
         });
-        articleTimeStamp.put(key, now());
       }
     }
 

@@ -137,7 +137,7 @@ module.exports = function (app) {
       var articleId = req.param('articleId');
       var action = req.param('action');
       if (action && action === 'create') {
-
+        //Seems not needed, created ones are empty ones with def
       } else {
         cacheManager.getArticleContent(articleId, function (err, item) {
           if (err) {
@@ -291,6 +291,28 @@ module.exports = function (app) {
         });
       }
     });
+  });
+
+  //Detailed article page
+  //One Extension of chrome always require jquery.ui.min.css, disable the chrome extension to avoid influencing this router
+  app.get('/writer/:title', function (req, res) {
+    var title = req.params.title;
+  });
+
+  //Detailed article page
+  //One Extension of chrome always require jquery.ui.min.css, disable the chrome extension to avoid influencing this router
+  app.get('/writer/:id', function (req, res) {
+    var id = req.params.id;
+    if (!req.session.user) {
+      // Use is not logged-in and redirect back to login page
+      res.redirect('/');
+    } else {
+      var userId = req.session.user._id;
+      //Make sure articleId = id is an article that this user have permission to edit
+
+
+
+    }
   });
 
   app.get('/env', function (req, res) {
