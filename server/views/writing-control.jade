@@ -1,0 +1,13 @@
+input(type='hidden', value=selectedArticleId)#selectedArticleId
+- article = typeof(article) != 'undefined' ? article : { }
+button#reorgLayout
+.container-fluid
+  .row-fluid
+    .span6#content-container
+      textarea#article-content= article.Content
+    .span6#preview-container
+      div#article-preview!= article.Preview
+
+block scripts
+  script(src='/vendor/marked.js')
+  script(src='/js/views/writing-control.js')

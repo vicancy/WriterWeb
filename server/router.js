@@ -105,8 +105,9 @@ module.exports = function (app) {
           if (items) {
             res.render('editable-article-list',
             {
-              items: items,
-              selectedArticleId: items[0]._id
+              items : items,
+              selectedArticleId : items[0]._id,
+              mode : "subfield"
             });
           }
         });
@@ -120,7 +121,8 @@ module.exports = function (app) {
             res.render('editable-article-list',
             {
               items: items,
-              selectedArticleId: items[0]._id
+              selectedArticleId: items[0]._id,
+              mode : "subfield"
             });
           }
         });
@@ -203,6 +205,50 @@ module.exports = function (app) {
         res.render('settings', {title: "Settings", user: items[0]});
       });
     }
+  });
+
+
+
+  //Detailed article page
+  //One Extension of chrome always require jquery.ui.min.css, disable the chrome extension to avoid influencing this router
+  app.get('/writer/:id', function (req, res) {
+    var id = req.params.id;
+    if (typeof(id) !== 'number') {
+      //next();
+    }
+    if (!req.session.user) {
+      // Use is not logged-in and redirect back to login page
+      res.redirect('/');
+    } else {
+      var userId = req.session.user._id;
+      var user = typeof(req.session.user) == 'undefined' ? null : req.session.user;
+      cacheManager.getArticleContent(id, function (err, item){
+        if (err) {
+          throw err;
+        }
+
+        if (!item) {
+          res.render('NotFound', { title : 'Article Not Found !', user : user});
+        }
+
+        //Make sure articleId = id is an article that this user have permission to edit
+        if (userId !== item.UserId) {
+          res.render('NotFound', { title : 'Article Belongs to Current User Not Found !', user : user});
+        }
+        res.render('writing-page', {
+          title : "Purely Writing",
+          article : item,
+          selectedArticleId : item._id,
+          mode : "fullscreen"
+        });
+      });
+    }
+  });
+
+  //Detailed article page
+  //One Extension of chrome always require jquery.ui.min.css, disable the chrome extension to avoid influencing this router
+  app.get('/writer/:title', function (req, res) {
+    var title = req.params.title;
   });
 
   //Writer page
@@ -293,27 +339,6 @@ module.exports = function (app) {
     });
   });
 
-  //Detailed article page
-  //One Extension of chrome always require jquery.ui.min.css, disable the chrome extension to avoid influencing this router
-  app.get('/writer/:title', function (req, res) {
-    var title = req.params.title;
-  });
-
-  //Detailed article page
-  //One Extension of chrome always require jquery.ui.min.css, disable the chrome extension to avoid influencing this router
-  app.get('/writer/:id', function (req, res) {
-    var id = req.params.id;
-    if (!req.session.user) {
-      // Use is not logged-in and redirect back to login page
-      res.redirect('/');
-    } else {
-      var userId = req.session.user._id;
-      //Make sure articleId = id is an article that this user have permission to edit
-
-
-
-    }
-  });
 
   app.get('/env', function (req, res) {
     res.send(process.env);

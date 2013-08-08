@@ -18,6 +18,7 @@ var saveArticleContentToCache = function (params, callback) {
   if (!params.articleId) throw "Invalid ArticleId";
   var id = parseInt(params.articleId);
   if (!params.article.Address) throw "Should NOT " + params.article.Address;
+  //Only update mode would update the updated timestamp of article(stands for the last modified time)
   if (params.action && params.action === 'update') {
     idAddressMapping.put(params.article.Address, id);
   }
@@ -70,6 +71,18 @@ exports.getTop10AvailableArticles = function (userId, callback) {
 };
 
 //callback(err, article)
+/*
+{ _id: 1,
+  Address: '1B1E066A-AF7C-4E91-8506-6D4826000960',
+  UserId: 1,
+  LastUpdatedDate: '2013-08-08 11:00',
+  NotebookName: 'My Notebook',
+  NotebookId: 1,
+  Title: '“Test for update 2”',
+  Content: '## b\n',
+  Preview: '<h3>de block \n\n',
+  Abstract: '###  a blockquote\n\n' },
+*/
 exports.getArticleContent = function (articleId, callback) {
   var article = cache.get(articleId);
   if (article) {

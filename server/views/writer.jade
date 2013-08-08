@@ -12,10 +12,8 @@ block content
       .span2.middle
         a(href='javascript:void(0)', onclick='newArticle(#{selectedNotebookId})') + Write An Article
         div#article-list
-      .span4
-        textarea#article-content
-      .span4#article-preview
-
+      .span8
+        include writing-control
 block scripts
   script(src='/vendor/marked.js')
   script(src='/js/views/writer.js')
