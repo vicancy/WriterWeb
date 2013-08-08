@@ -160,34 +160,9 @@ exports.getArticleContentByAddress = function (address, callback) {
   }
 };
 
-/*
-article:
- { _id: 34,
-   Address: '4814FA68-BFDA-40B7-9B36-36549D500696',
-   LastUpdatedDate: '2013-08-08 20:08',
-   NotebookName: 'My Notebook',
-   Title: 'Untitled',
-   Abstract: null}
-*/
+//callback(err)
 exports.createArticleWithTemplate = function (params, callback) {
-  notebookManager.createArticleWithTemplateToDatabase(params, function (err, items) {
-    if (err) {
-      throw err;
-    }
-    //TODO: Is there needs to save article to cache here?
-    if (items) {
-      items.forEach(function (item) {
-
-        saveArticleContentToCache({
-            articleId : item._id,
-            article : item,
-            action : 'get'
-          });
-      });
-    }
-
-    callback(err, items);
-  });
+  notebookManager.createArticleWithTemplateToDatabase(params, callback);
 };
 
 /*
