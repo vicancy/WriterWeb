@@ -66,13 +66,15 @@ module.exports = function (app) {
   });
 
   app.get("/article-list", function (req, res) {
-    console.log(req.session);
     if (!req.session.user) {
       // Use is not logged-in and redirect back to login page
       res.send("not authenticated.");
     } else {
       var userId = req.session.user._id;
-      cacheManager.getTop10AvailableArticles(userId, function (err, items) {
+      cacheManager.getAvailableArticles({
+        'userId' : userId,
+        'count' : 10 //Get top 10 of all the articles
+      }, function (err, items) {
         if (err) {
           throw err;
         }
@@ -85,8 +87,6 @@ module.exports = function (app) {
 
 
   app.get("/editable-article-list", function (req, res) {
-    console.log(req.session);
-    console.log(req.session.user);
     if (!req.session.user) {
       // Use is not logged-in and redirect back to login page
       res.send("not authenticated.");
@@ -94,9 +94,10 @@ module.exports = function (app) {
       var params = {
         userId : req.session.user._id,
         notebookId : req.param('notebookId'),
-        action : req.param('action')
       };
-      if (params.action && params.action === 'create') {
+
+      var action = req.param('action');
+      if (action && action === 'create') {
         cacheManager.createArticleWithTemplate(params, function (err, items) {
           if (err) {
             throw err;
@@ -112,12 +113,11 @@ module.exports = function (app) {
           }
         });
       } else {
-        notebookManager.getAvailableArticlesByNotebookIdFromDatabase(params, function (err, items) {
+        cacheManager.getAvailableArticles(params, function (err, items) {
           if (err) {
             throw err;
           }
-
-          if (items) {
+          if (items && items.length > 0) {
             res.render('editable-article-list',
             {
               items: items,
@@ -165,6 +165,7 @@ module.exports = function (app) {
     res.render('signup', { title: 'Signup' });
   });
 
+  //callback (e, user)
   app.post('/signup', function (req, res) {
     accountManager.addNewAccount({
       user: req.param('user'),
@@ -172,11 +173,15 @@ module.exports = function (app) {
       description: req.param('description'),
       nickname: req.param('name'),
       email: req.param('email')
-    }, function (e) {
+    }, function (e, items) {
       console.log(e);
+      //Set this user to current session
       if (e) {
         res.send(e, 400);
+      } else if (items.length !== 1) {
+        res.send("More than one user return when create user!", 400);
       } else {
+        req.session.user = items[0];
         res.send('ok', 200);
       }
     });

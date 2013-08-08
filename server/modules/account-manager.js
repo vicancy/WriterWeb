@@ -1,5 +1,6 @@
 var crypto = require('crypto'),
   moment = require('moment'),
+  errorcode = require('./errorcode'),
   databaseManager = require('./database-manager');
 
 /* login validation methods */
@@ -49,34 +50,27 @@ exports.addNewAccount = function (newData, callback) {
   var nickname = newData.nickname;
   var details = '';
   var password;
-  var query = "select nvc_account_name as 'user' from account where nvc_account_name= '" + user + "'";
 
+  saltAndHash(newData.password, function (hash) {
+    password = hash;
+    // append date stamp when record was created //
+    newData.date = moment().format('MMMM Do YYYY, h:mm:ss a');
 
-  databaseManager.query(query, function (err, items) {
-    if (err) {
-      throw err;
-    }
-    if (items && items[0]) {
-      callback('username-taken');
-    } else {
-      saltAndHash(newData.password, function (hash) {
-        password = hash;
-        // append date stamp when record was created //
-        newData.date = moment().format('MMMM Do YYYY, h:mm:ss a');
+    var sp = "public_account_add_new_account";
+    var params = {
+      'nvc_account_name' : user,
+      'nvc_account_description' : description,
+      'vc_account_password' : password,
+      'vc_account_email' : email,
+      'nvc_account_nickname' : nickname
+    };
 
-        var sp = "public_account_add_new_account";
-        var params = {
-          'nvc_account_name' : user,
-          'nvc_account_description' : description,
-          'vc_account_password' : password,
-          'vc_account_email' : email,
-          'nvc_account_nickname' : nickname
-        };
-
-        databaseManager.exec(sp, params, callback);
-      });
-    }
+    databaseManager.exec(sp, params, function (err, items) {
+      //What err is thrown when username taken?
+      callback(errorcode.getErrorCode(err), items);
+    });
   });
+
 };
 
 

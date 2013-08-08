@@ -6,8 +6,13 @@ var express = require("express"),
 
 nconf.env()
      .file({ file: 'config.json'});
-
+var env = nconf.get("env");
 var conn = nconf.get("SQL_Local");
+
+if (env === 'Azure') {
+  conn = nconf.get("SQL_Azure");
+  console.log("Connecting to SQL AZURE...");
+}
 
 app.configure('production', function () {
         conn = nconf.get("SQL_Azure");
@@ -46,6 +51,5 @@ exports.exec = function (sp, params, callback) {
   console.log(query);
   sql.query(conn, query, function (err, items) {
     callback(err, items);
-
   });
 };

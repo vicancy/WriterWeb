@@ -48,12 +48,20 @@ exports.getTop10AvailableArticlesFromDatabase = function (userId, callback) {
 };
 
 //callback(err, articles)
-exports.getAvailableArticlesByNotebookIdFromDatabase = function (parameters, callback) {
+/*
+var params = {
+  'user_id' : parameters.userId,
+  'notebook_id' : parameters.notebookId,
+  'count' : parameters.count
+};
+*/
+exports.getAvailableArticlesFromDatabase = function (parameters, callback) {
 
   var sp = "public_article_get_available_articles";
   var params = {
     'user_id' : parameters.userId,
-    'notebook_id' : parameters.notebookId
+    'notebook_id' : parameters.notebookId, // if not specified, get all articles
+    'count' : parameters.count
   };
 
   databaseManager.exec(sp, params, callback);

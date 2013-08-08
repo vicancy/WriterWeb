@@ -53,12 +53,19 @@ exports.updateArticle = function (params, callback) {
   }
 };
 
-//callback(err, articles) : Use cached data first
-exports.getTop10AvailableArticles = function (userId, callback) {
-  notebookManager.getTop10AvailableArticlesFromDatabase(userId, function (err, articles) {
+//callback(err, articles)
+/*
+var params = {
+  'user_id' : parameters.userId,
+  'notebook_id' : parameters.notebookId,
+  'count' : parameters.count
+};
+*/
+exports.getAvailableArticles = function (params, callback) {
+  notebookManager.getAvailableArticlesFromDatabase(params, function (err, articles) {
     articles.forEach(function (article) {
       var cachedArticle = cache.get(article._id);
-      console.log("getTop10AvailableArticles", article, cachedArticle, cache.items());
+      console.log("getAvailableArticles", article, cachedArticle, cache.items());
       if (cachedArticle) {
         article.Abstract = cachedArticle.Abstract;
         article.LastUpdatedDate = cachedArticle.LastUpdatedDate;
@@ -153,20 +160,30 @@ exports.getArticleContentByAddress = function (address, callback) {
   }
 };
 
+/*
+article:
+ { _id: 34,
+   Address: '4814FA68-BFDA-40B7-9B36-36549D500696',
+   LastUpdatedDate: '2013-08-08 20:08',
+   NotebookName: 'My Notebook',
+   Title: 'Untitled',
+   Abstract: null}
+*/
 exports.createArticleWithTemplate = function (params, callback) {
   notebookManager.createArticleWithTemplateToDatabase(params, function (err, items) {
     if (err) {
       throw err;
     }
-
+    //TODO: Is there needs to save article to cache here?
     if (items) {
-      for (var item in items) {
+      items.forEach(function (item) {
+
         saveArticleContentToCache({
             articleId : item._id,
             article : item,
             action : 'get'
           });
-      }
+      });
     }
 
     callback(err, items);
