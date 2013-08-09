@@ -3,13 +3,10 @@ function convertMarkdown2Html(content) {
   var preview = $("#article-preview");
   // hide html
   var data = marked(content);
-  preview.fadeOut("fast").empty();
+  //preview.hide().empty();
 
   var convertCallback = function (data, callback) {
-    preview
-      .addClass("display-none")
-      .append(data)
-      .fadeIn("fast");
+    preview.html(data);
     callback();
   };
 
@@ -71,7 +68,7 @@ function writing () {
 
     var preview = $("#article-preview");
     // hide html
-    preview.fadeOut("fast").empty();
+    //preview.fadeOut("fast").empty();
 
     var url = window.generateUrl("editable-article");
     var data = {
@@ -79,8 +76,9 @@ function writing () {
       action: action
     };
     $.get(url, data).success(function (params) {
+      $("#article-title").text(params.title);
       $("#article-content").val(params.markdown);
-      $("#article-preview").append(params.html).fadeIn('fast');
+      $("#article-preview").html(params.html);
       //updatePreview(selectedArticleId); //this line makes each click a post request, comment out
     })
     .error(function (err) {

@@ -47,6 +47,7 @@ module.exports = function (app) {
           if (item) {
             res.send(
               {
+                title : item.Title,
                 markdown :item.Content,
                 html : item.Preview
               });
