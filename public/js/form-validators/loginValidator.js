@@ -13,17 +13,17 @@ function LoginValidator(){
 		this.loginErrors.modal('show');
 	}
 
-}
+};
 
 LoginValidator.prototype.validateForm = function()
 {
-	if ($('#user-tf').val() == ''){
+	if ($('#user-tf').val() === ''){
 		this.showLoginError('Whoops!', 'Please enter a valid username');
 		return false;
-	}	else if ($('#pass-tf').val() == ''){
+	}	else if ($('#pass-tf').val() === ''){
 		this.showLoginError('Whoops!', 'Please enter a valid password');
 		return false;
 	}	else{
 		return true;
 	}
-}
+};

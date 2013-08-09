@@ -8,7 +8,7 @@ $(document).ready(function () {
 
   $('#login-form').ajaxForm({
     beforeSubmit : function (formData, jqForm, options) {
-      if (lv.validateForm() == false){
+      if (lv.validateForm() === false){
         return false;
       } else{
         // append 'remember-me' option to formData to write local cookie //

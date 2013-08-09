@@ -2,12 +2,12 @@
 - user = typeof(udata) != 'undefined' ? udata : { }
 // store the userId on the client side in a hidden input field //
 input(type='hidden', value= user._id)#userId
-
 #account-form-container
   form(method="post")#account-form.well.col-6
     h1
     hr
     p#sub1.subheading Please tell us a little about yourself.
+    include alert/alertMessage
     fieldset
       #name-cg.form-group
         label.control-label(for='name-tf') Name

@@ -23,12 +23,17 @@ a {
   min-height: 600px;
 }
 
+/* Signup Page */
+.form-group.error input{
+  border: 1px solid #b94a48;
+}
+
+/* Ending Signup Page */
+
 /* Login Page */
 .form-group.form-group-login {
   margin-bottom: 60px;
 }
-
-
 
 /* Ending Login Page */
 
