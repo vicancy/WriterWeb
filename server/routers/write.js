@@ -57,6 +57,88 @@ module.exports = function (app) {
       }
     }
   });
+
+
+  //Writer page
+  app.get("/writer", function (req, res) {
+    if (!req.session.user) {
+      // Use is not logged-in and redirect back to login page
+      res.redirect('/');
+    } else {
+      var userId = req.session.user._id;
+      notebookManager.getAvailableNotebooks(userId, function (err, items) {
+        if (err) {
+          throw err;
+        }
+        console.log(items[0]._id);
+        res.render('writer', {
+          user: req.session.user,
+          title: "Writer's Page",
+          notebooks: items,
+          selectedNotebookId: items[0]._id
+        });
+      });
+    }
+  });
+
+  //Save article to database
+  app.post("/writer", function (req, res) {
+    var params = {
+      articleId : req.param('article'),
+      markdown : req.param('markdown'),
+      html : req.param('html')
+    };
+    cacheManager.updateArticle(params, function (e) {
+      if (e) {
+        res.send(e, 400);
+      } else {
+        res.send('ok', 200);
+      }
+    });
+  });
+
+  //Detailed article page
+  //One Extension of chrome always require jquery.ui.min.css, disable the chrome extension to avoid influencing this router
+  app.get('/writer/:id', function (req, res) {
+    var id = req.params.id;
+    if (typeof(id) !== 'number') {
+      //next();
+    }
+    if (!req.session.user) {
+      // Use is not logged-in and redirect back to login page
+      res.redirect('/');
+    } else {
+      var userId = req.session.user._id;
+      var user = typeof(req.session.user) == 'undefined' ? null : req.session.user;
+      cacheManager.getArticleContent(id, function (err, item){
+        if (err) {
+          throw err;
+        }
+
+        if (!item) {
+          res.render('NotFound', { title : 'Article Not Found !', user : user});
+        }
+
+        //Make sure articleId = id is an article that this user have permission to edit
+        if (userId !== item.UserId) {
+          res.render('NotFound', { title : 'Article Belongs to Current User Not Found !', user : user});
+        }
+        res.render('writing-page', {
+          title : "Purely Writing",
+          article : item,
+          selectedArticleId : item._id,
+          mode : "fullscreen"
+        });
+      });
+    }
+  });
+
+  //Detailed article page
+  //One Extension of chrome always require jquery.ui.min.css, disable the chrome extension to avoid influencing this router
+  app.get('/writer/:title', function (req, res) {
+    var title = req.params.title;
+  });
+
 };
 
 

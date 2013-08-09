@@ -1,5 +1,14 @@
 var errors = {
-  'ACCOUNT_EXISTS' : 'THE ACCOUNT ALREADY EXISTS'
+  'ACCOUNT_EXISTS' : 'THE ACCOUNT ALREADY EXISTS',
+  'USER_PASS_MISMATCH' : 'THE USERNAME AND PASSWORD DOES NOT MATCH',
+  'FAILED_CREATE_USER' : 'FAIL TO CREATE USER'
+};
+
+var errorCodes = {
+  'ACCOUNT_EXISTS' : 'username-taken',
+  'USER_PASS_MISMATCH' : 'user-pass-mismatch',
+  'UNKNOWN' : 'unknown-error',
+  'FAILED_CREATE_USER': 'failed_creation'
 };
 
 exports.getErrorCode = function (msg) {
@@ -11,11 +20,13 @@ exports.getErrorCode = function (msg) {
     // If is not SQL exception, then string itself is the error message
     var err = msg.toString();
     if (err.search(errors.ACCOUNT_EXISTS) !== -1) {
-      return 'username-taken';
+      return errorCodes.ACCOUNT_EXISTS;
     }
 
-    return 'unknown-error';
+    return errorCodes.UNKNOWN;
   } else {
     return null;
   }
 };
+
+exports.errorCodes = errorCodes;

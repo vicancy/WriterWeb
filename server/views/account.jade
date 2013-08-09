@@ -33,9 +33,6 @@ input(type='hidden', value= user._id)#userId
         .controls
           input#pass-tf.input-xlarge(type='password', name='pass', value='', placeholder='The login password').form-control
       .form-actions
-        button(type='button')#account-form-btn1.btn
-        button(type='submit')#account-form-btn2.btn.pull-right
+        button(type='button')#account-form-btn1.btn.btn-default Cancel
+        button(type='submit')#account-form-btn2.btn.btn-primary.pull-right Create
 
-// display form errors in a custom modal window //
-
-include modals/form-errors

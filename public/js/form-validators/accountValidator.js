@@ -14,7 +14,7 @@ function AccountValidator(){
   this.validateName = function(s)
   {
     return s.length >= 3;
-  }
+  };
 
   this.validatePassword = function(s)
   {
@@ -24,24 +24,35 @@ function AccountValidator(){
     } else{
       return s.length >= 6;
     }
-  }
+  };
 
   this.validateEmail = function(e)
   {
     var re = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
     return re.test(e);
-  }
+  };
 
   this.showErrors = function(a)
   {
-    $('.modal-form-errors .modal-body p').text('Please correct the following problems :');
-    var ul = $('.modal-form-errors .modal-body ul');
-      ul.empty();
-    for (var i=0; i < a.length; i++) ul.append('<li>'+a[i]+'</li>');
-    this.alert.modal('show');
-  }
+    var alert =$('.alert.alert-danger');
+    var ul = $('.alert.alert-danger ul');
+    ul.empty();
+    for (var i=0; i < a.length; i++) {
+      ul.append('<li>'+a[i]+'</li>');
+    }
+
+    alert.removeClass('hide');
+  };
 
 }
+
+AccountValidator.prototype.clearErrorTag = function() {
+  $('input.form-control').each(function (index, item) {
+    $(this).bind('input', function () {
+      $(this).parents('.form-group.error').removeClass('error');
+    });
+  });
+};
 
 AccountValidator.prototype.showInvalidEmail = function()
 {
