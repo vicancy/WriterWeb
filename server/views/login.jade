@@ -1,24 +1,27 @@
 extends layout
 
 block content
-  #login-container
-    form(method="post")#login-form.well.span4
-      h1 Hello!
-      p.subheading= title
-      label Username
-      input(type="text", name="user", id='user-tf').span4.required
-      label Password
-      input(type="password", name="pass", id='pass-tf').span4.required
-      label#remember-me.checkbox Remember Me
-        input(type="checkbox", checked='checked')
-      button(type="submit")#btn-login.btn.btn-primary
-        i.icon-lock.icon-white
-        | Sign In
-      div.clear-fix
-      hr
-      div.btm-links
-        a(href='#')#forgot-password Forgot Your Password?
-        a(href='/signup')#create-account Create An Account
+  .container#login-container
+    form(method="post")#login-form.well.login.col-6
+      fieldset
+        legend Welcome to Write Everywhere
+        p.subheading= title
+        div.form-group.form-group-login
+          label(for='user-tf') Username
+          input(type="text", name="user", id='user-tf', placeholder='Enter your email address').col-6.required.form-control
+        div.form-group.form-group-login
+          label(for='pass-tf') Password
+          input(type="password", name="pass", id='pass-tf', placeholder='Type your password').col-6.required.form-control
+        label#remember-me.checkbox Remember Me
+          input(type="checkbox", checked='checked')
+        button(type="submit")#btn-login.btn.btn-default
+          i.icon-lock.icon-white
+          | Sign In
+        div.clear-fix
+        hr
+        div.btm-links
+          a(href='#')#forgot-password Forgot Your Password?
+          a(href='/signup')#create-account.pull-right Create An Account
 
   include modals/alert
   include modals/lost-password

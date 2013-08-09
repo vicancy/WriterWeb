@@ -3,18 +3,18 @@ block define
   - var pagemode = 'writer'
 block content
   input(type='hidden', value=selectedNotebookId)#selectedNotebookId
-  .container-fluid
+  .container
     .row-fluid
-      .span2.aside
+      .col-2.aside
         a(href='javascript:void(0)') + Add Notebook
         ul.nav.nav-list.ui-sortable
           each notebook in notebooks
             li
               a(href='javascript:void(0)', onclick='setArticleSelected(#{notebook._id});loadArticles(#{notebook._id});')= notebook.name
-      .span2.middle
+      .col-2.middle
         a(href='javascript:void(0)', onclick='newArticle(#{selectedNotebookId})') + Write An Article
         div#article-list
-      .span8
+      .col-8
         include writing-control
 block scripts
   script(src='/vendor/marked.js')
