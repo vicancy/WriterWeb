@@ -7,6 +7,11 @@ var generateUrl = function (basic) {
   return  window.location.origin + "/" + basic + "?breakcache=" + Math.random();
 };
 
+var initBootstrapControls = function () {
+  $('.dropdown-toggle').dropdown();
+};
+
 $(document).ready(function () {
   window.generateUrl = generateUrl;
+  initBootstrapControls();
 });

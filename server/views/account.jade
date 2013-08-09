@@ -4,37 +4,37 @@
 input(type='hidden', value= user._id)#userId
 
 #account-form-container
-  form( method="post")#account-form.form-horizontal.well.span6
+  form(method="post")#account-form.well.col-6
     h1
     hr
     p#sub1.subheading Please tell us a little about yourself.
     fieldset
-      #name-cg.control-group
+      #name-cg.form-group
         label.control-label(for='name-tf') Name
         .controls
-          input#name-tf.input-xlarge(type='text', name='name', value= user.name)
-      #email-cg.control-group
+          input#name-tf.input-xlarge(type='text', name='name', value= user.name, placeholder='Give a name shown in the profiler').form-control
+      #email-cg.form-group
         label.control-label(for='email-tf') Email
         .controls
-          input#email-tf.input-xlarge(type='text', name='email', value= user.email)
-      #description-cg.control-group
+          input#email-tf.input-xlarge(type='text', name='email', value= user.email, placeholder='Enter your email address').form-control
+      #description-cg.form-group
         label.control-label(for='description-tf') Description
         .controls
-          input#description-tf.input-xlarge(type='text', name='description', value= user.description)
+          input#description-tf.input-xlarge(type='text', name='description', value= user.description, placeholder='Describe yourself').form-control
 
       hr
       p#sub2.subheading
-      #user-cg.control-group
+      #user-cg.form-group
         label.control-label(for='user-tf') Username
         .controls
-          input#user-tf.input-xlarge.disabled(type='text', name='user', value= user.user)
-      #pass-cg.control-group
+          input#user-tf.input-xlarge.disabled(type='text', name='user', value= user.user, placeholder='The login name').form-control
+      #pass-cg.form-group
         label.control-label(for='pass-tf') Password
         .controls
-          input#pass-tf.input-xlarge(type='password', name='pass', value='')
+          input#pass-tf.input-xlarge(type='password', name='pass', value='', placeholder='The login password').form-control
       .form-actions
         button(type='button')#account-form-btn1.btn
-        button(type='submit')#account-form-btn2.btn
+        button(type='submit')#account-form-btn2.btn.pull-right
 
 // display form errors in a custom modal window //
 

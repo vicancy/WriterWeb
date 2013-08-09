@@ -2,7 +2,7 @@ extends layout
 
 block content
   .container#login-container
-    form(method="post")#login-form.well.login.col-6
+    form(method="post")#login-form.well.col-6
       fieldset
         legend Welcome to Write Everywhere
         p.subheading= title
@@ -14,10 +14,9 @@ block content
           input(type="password", name="pass", id='pass-tf', placeholder='Type your password').col-6.required.form-control
         label#remember-me.checkbox Remember Me
           input(type="checkbox", checked='checked')
-        button(type="submit")#btn-login.btn.btn-default
+        button(type="submit")#btn-login.btn.btn-primary
           i.icon-lock.icon-white
           | Sign In
-        div.clear-fix
         hr
         div.btm-links
           a(href='#')#forgot-password Forgot Your Password?
