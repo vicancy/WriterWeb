@@ -40,7 +40,10 @@ exports.saveArticleContentToCache = saveArticleContentToCache;
 exports.updateArticle = function (params, callback) {
   var article = cache.get(params.articleId);
   //If have changes, update cache
-  if (params.markdown !== article.Content) {
+  //Add !article.Content for : TypeError: Cannot read property 'Content' of null
+
+  console.log("updateArticle: ", article, params, cache.items());
+  if (article && !article.Content || params.markdown !== article.Content) {
     article.Content = params.markdown;
     article.Preview = params.html;
     article.Abstract = notebookManager.getAbstractFromContent(article.Content);

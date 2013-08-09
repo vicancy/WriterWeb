@@ -73,7 +73,7 @@ function writing () {
     // hide html
     preview.fadeOut("fast").empty();
 
-    var url = "/editable-article";
+    var url = window.generateUrl("editable-article");
     var data = {
       articleId: articleId,
       action: action

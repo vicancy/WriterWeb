@@ -1,7 +1,7 @@
 var writing = new window.writing();
 
 var loadArticles = function (notebookId, action) {
-  var url = "editable-article-list";
+  var url = window.generateUrl("editable-article-list");
   var data = {
     notebookId: notebookId,
     action: action
@@ -38,7 +38,7 @@ var newArticle = function (notebookId) {
 var loadArticle = function (articleId) {
   writing.setArticleSelected(articleId);
   writing.loadArticleContent('get');
-}
+};
 
 $(document).ready(function () {
   loadArticles(getNotebookSelected());

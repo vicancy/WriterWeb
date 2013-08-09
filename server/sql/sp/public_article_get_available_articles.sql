@@ -1,13 +1,10 @@
 USE [WriterController]
 GO
-
-/****** Object:  StoredProcedure [dbo].[public_article_get_available_articles]    Script Date: 8/8/2013 7:35:59 PM ******/
+/****** Object:  StoredProcedure [dbo].[public_article_get_available_articles]    Script Date: 8/9/2013 10:19:23 AM ******/
 SET ANSI_NULLS ON
 GO
-
 SET QUOTED_IDENTIFIER ON
 GO
-
 -- =============================================
 -- Author:		<Author,,Name>
 -- Create date: <Create Date,,>
@@ -30,25 +27,26 @@ BEGIN
 	BEGIN
 		SET rowcount @count
 	END
-	  
+
 	DECLARE @sql varchar(2000)= '
-	select a.i_article_id as ''_id'', 
-	  a.nvc_unique_address as ''Address'', 
-	  Case 
-		When a.dt_modified_datetime is null THEN convert(nvarchar(16), a.dt_inserted_datetime, 120) 
-		ELSE convert(nvarchar(16), a.dt_modified_datetime, 120) 
-	  END 
-	  AS ''LastUpdatedDate'', 
+	select a.i_article_id as ''_id'',
+	  a.nvc_unique_address as ''Address'',
+	  Case
+		When a.dt_modified_datetime is null THEN convert(nvarchar(16), a.dt_inserted_datetime, 120)
+		ELSE convert(nvarchar(16), a.dt_modified_datetime, 120)
+	  END
+	  AS ''LastUpdatedDate'',
 	  nb.nvc_notebook_name as ''NotebookName'', av.nvc_article_title as ''Title'',
-	  av.nvc_article_abstract as ''Abstract'' 
-	  from article a 
-	  join notebook nb 
-	  on a.i_notebook_id = nb.i_notebook_id 
-	  join article_version av 
+	  av.nvc_article_abstract as ''Abstract'',
+	  av.nvc_article_preview as ''Preview''
+	  from article a
+	  join notebook nb
+	  on a.i_notebook_id = nb.i_notebook_id
+	  join article_version av
 	  on a.i_latest_version_id = av.i_version_id and a.i_article_id = av.i_article_id '
-	IF @user_id + @notebook_id <> 0 
+	IF @user_id + @notebook_id <> 0
 	BEGIN
-		SET @sql = @sql + 'WHERE' 
+		SET @sql = @sql + 'WHERE'
 		IF @user_id <> 0
 		BEGIN
 			SET @sql = @sql + ' nb.i_account_id = ' + convert(varchar(32), @user_id)
@@ -61,10 +59,6 @@ BEGIN
 
 	SET @sql = @sql + ' order by a.dt_modified_datetime desc'
 	PRINT(@sql)
-	
+
 	EXEC(@sql)
 END
-
-GO
-
-

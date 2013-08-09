@@ -1,6 +1,7 @@
 var notebookManager = require('../modules/notebook-manager'),
   cacheManager = require('../modules/cache-manager');
 
+
 module.exports = function (app) {
   app.get("/editable-article-list", function (req, res) {
     if (!req.session.user) {
