@@ -1,5 +1,5 @@
 {
-  "env" : "Azur",
+  "env" : "Azure",
   "SQL_Azure" : "Driver={SQL Server Native Client 10.0}; Server=tcp:a20olypuzc.database.windows.net,1433;Database=WriterController;Uid=writer@a20olypuzc;Pwd=Wmoon0987;Encrypt=yes;Connection Timeout=30;",
   "SQL_Local" : "Driver={SQL Server Native Client 11.0}; Server={localhost}; Database=WriterController; Trusted_Connection={Yes};"
 }
