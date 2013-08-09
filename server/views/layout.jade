@@ -16,7 +16,7 @@ html
     // store the userId on the client side in a hidden input field //
     if user != null
       input(type='hidden', value= user._id)#userId
-
+    block define
     div(class='navbar navbar-fixed-top navbar-inverse')
       .navbar-inner
         .container-fluid
@@ -31,10 +31,15 @@ html
                 |Hello,
                 a(href="/Settings",class="navbar-link") #{user.user}
                 a(href="/SignOut",class="navbar-link")   Sign Out
-            ul(class="nav")
-              li(class="active")
-                a(href="/") Home
+            ul(class="nav pull-right")
               li
-                a(href="/Writer") Writer
+                if (pagemode && (pagemode.toLowerCase() == 'writer'.toLowerCase()))
+                  a(href="/home")
+                    i.img.reader
+                    |Reader's Page
+                else
+                  a(href="/Writer")
+                    i.img.writer
+                    |Writer's Page
     block content
     block scripts

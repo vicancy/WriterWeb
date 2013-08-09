@@ -1,4 +1,6 @@
 extends layout
+block define
+  - var pagemode = 'writer'
 block content
   input(type='hidden', value=selectedNotebookId)#selectedNotebookId
   .container-fluid

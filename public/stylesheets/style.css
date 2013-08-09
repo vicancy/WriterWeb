@@ -7,7 +7,39 @@ a {
   color: #00B7FF;
 }
 
+.navbar .nav-collapse ul.nav>li>a {
+  color: #eee;
+  padding: 3px 8px 3px 8px;
+  margin: 7px;
+}
+
+.navbar .nav-collapse .nav>li>a:hover {
+  background-color: #444;
+  border-radius: 3px;
+}
+
 #article-content {
   width: 100%;
   min-height: 600px;
+}
+
+.nav i.img {
+  background-image: url(background.png);
+  background-size: auto;
+  background-repeat: no-repeat;
+  display: inline-block;
+  vertical-align: -2px;
+  margin-right: 5px;
+}
+
+.nav i.img.writer {
+  width: 13px;
+  height: 15px;
+  background-position: -119px -192px;
+}
+
+.nav i.img.reader {
+  width: 13px;
+  height: 15px;
+  background-position: -119px -192px;
 }
