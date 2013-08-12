@@ -33,8 +33,10 @@ exports.saveArticleContentToCache = saveArticleContentToCache;
 /*
   var params = {
     articleId : req.param('article'),
+    title : req.param('title'),
     markdown : req.param('markdown'),
-    html : req.param('html')
+    html : req.param('html'),
+    mode : req.param('mode')
   };
 */
 exports.updateArticle = function (params, callback) {
@@ -43,7 +45,15 @@ exports.updateArticle = function (params, callback) {
   //Add !article.Content for : TypeError: Cannot read property 'Content' of null
 
   console.log("updateArticle: ", article, params, cache.items());
-  if (article && !article.Content || params.markdown !== article.Content) {
+  if (article && params.mode === 'title' && article.Title !== params.title) {
+    article.Title = params.title;
+    console.log("have changes, updating ", article);
+    saveArticleContentToCache({
+      articleId : params.articleId,
+      article : article,
+      action : 'update'
+    }, callback);
+  } else if (article && !article.Content || params.markdown !== article.Content) {
     article.Content = params.markdown;
     article.Preview = params.html;
     article.Abstract = notebookManager.getAbstractFromContent(article.Content);

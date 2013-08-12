@@ -35,15 +35,24 @@ var saveContent = function (articleContent) {
   });
 };
 
-var updatePreview = function () {
+var updatePreview = function (mode) {
   // real-time markdown2html generation or save html to database?
   // save html to database is better: considering read mode
   var data = convertMarkdown2Html($("#article-content").val());
-  saveContent({
-    article : getArticleSelected(),
-    markdown : $("#article-content").val(),
-    html : $("#article-preview").html() ? $("#article-preview").html() : data
-  });
+  if (mode === 'title') {
+    saveContent({
+      article : getArticleSelected(),
+      title : $("#article-title").val(),
+      mode : mode
+    });
+  } else {
+    saveContent({
+      article : getArticleSelected(),
+      title : $("#article-title").val(),
+      markdown : $("#article-content").val(),
+      html : $("#article-preview").html() ? $("#article-preview").html() : data
+    });
+  }
 };
 
 var getArticleSelected = function () {
@@ -76,7 +85,7 @@ function writing () {
       action: action
     };
     $.get(url, data).success(function (params) {
-      $("#article-title").text(params.title);
+      $("#article-title").val(params.title);
       $("#article-content").val(params.markdown);
       $("#article-preview").html(params.html);
       //updatePreview(selectedArticleId); //this line makes each click a post request, comment out
@@ -85,6 +94,14 @@ function writing () {
       //How to print errors?
     });
   };
+
+  this.updateTitle = function (callback) {
+    $('#article-title').bind('input', callback);
+  };
+
+  this.updateContent = function (callback) {
+    $('#article-content').bind('input', callback);
+  }
 
   this.initPreviewPanel = initPreviewPanel;
   this.getArticleSelected = getArticleSelected;
@@ -104,6 +121,17 @@ function writing () {
       }, 500);
     });
 
+    var title_ctl = $("#article-title");
+    var title = title_ctl.val();
+    title_ctl.keyup(function () {
+      delay(function () {
+        var curval = title_ctl.val();
+        if (curval !== title) {
+          updatePreview('title');
+          title = title_ctl.val();
+        }
+      }, 100);
+    })
     isInitialized = true;
   };
 }

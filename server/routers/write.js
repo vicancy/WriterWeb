@@ -87,7 +87,9 @@ module.exports = function (app) {
     var params = {
       articleId : req.param('article'),
       markdown : req.param('markdown'),
-      html : req.param('html')
+      title : req.param('title'),
+      html : req.param('html'),
+      mode : req.param('mode'),
     };
     cacheManager.updateArticle(params, function (e) {
       if (e) {

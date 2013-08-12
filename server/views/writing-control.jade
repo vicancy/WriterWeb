@@ -1,10 +1,10 @@
 input(type='hidden', value=selectedArticleId)#selectedArticleId
 - article = article !== undefined ? article : { }
 .container
-  input(type="text")#article-title= article.Title
+  input(type="text", placeholder="Title")#article-title= article.Title
   .row
     .col-6#content-container
-      textarea#article-content= article.Content
+      textarea#article-content(placeHolder="Type your article here with markdown syntax")= article.Content
     .col-6#preview-container
       div#article-preview!= article.Preview
 

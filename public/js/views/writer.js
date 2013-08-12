@@ -35,10 +35,26 @@ var newArticle = function (notebookId) {
   loadArticles(notebookId, 'create');
 };
 
+var updateArticleList = function () {
+  writing.updateTitle(function (index, item) {
+    var title = $(this).val();
+    $('.list-group.articles a.active h4').text(title);
+  });
+};
+
+var updateArticleAbstract = function () {
+  writing.updateContent(function (index, item) {
+    var abstract = $(this).val().substring(0, 200);
+    $('.list-group.articles a.active p').text(abstract);
+  });
+};
+
 var loadArticle = function (element, articleId) {
   Global.ActiveElement($('.list-group.articles a'), element);
   writing.setArticleSelected(articleId);
   writing.loadArticleContent('get');
+  updateArticleList();
+  updateArticleAbstract();
 };
 
 $(document).ready(function () {
