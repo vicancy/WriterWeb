@@ -55,6 +55,8 @@ module.exports = function (app) {
   Email: 'reader3@173.com',
   Nickname: 'reader3',
   Details: null }
+
+  items : [ { _id: 2, name: 'My Notebook', description: null } ]
   */
   app.get("/home", function (req, res) {
     console.log("/home req.session.user : ", req.session.user);
@@ -63,14 +65,20 @@ module.exports = function (app) {
       // Use is not logged-in and redirect back to login page
       res.redirect('/');
     } else {
-      var userId = req.session.user._id;
-      notebookManager.getTop5AvailableNotebooks(userId, function (err, items) {
+      var user = req.session.user;
+      notebookManager.getTop5AvailableNotebooks(user._id, function (err, items) {
         if (err) {
           throw err;
         }
 
+        console.log (items);
         if (items) {
-          res.render('index', {title: 'My Notebook', user: req.session.user, tasks: items});
+          var params = {
+            title: user.Nickname + ' - Write Everywhere',
+            user: user,
+            notebooks: items
+          };
+          res.render('index', params);
         }
       });
     }

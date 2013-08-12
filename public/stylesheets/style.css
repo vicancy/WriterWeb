@@ -7,6 +7,10 @@ a {
   color: #00B7FF;
 }
 
+.container h3 {
+  font-size: 20px;
+}
+
 .navbar .nav-collapse ul.nav>li>a {
   color: #eee;
   padding: 8px;
@@ -36,6 +40,93 @@ a {
 }
 
 /* Ending Login Page */
+
+/* Layout Page */
+.container .sidebar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  overflow: auto;
+  padding: 30px;
+  padding-top: 80px;
+  border-right: 1px solid #d9d9d9;
+  -webkit-box-shadow: -1px 1px 6px rgba(0,0,0,0.35);
+  -moz-box-shadow: -1px 1px 6px rgba(0,0,0,0.35);
+  box-shadow: -1px 1px 6px rgba(0,0,0,0.35);
+}
+
+.col-1.splitter {
+  width: 10px;
+  height: 200px;
+  -webkit-border-image: -webkit-gradient(linear, left top, left bottom, from(#fff), color-stop(0.2, #ccc), to(#fff))0 100% 0 0 stretch;
+}
+
+.g > div { background: #fff; }
+
+/* Ending Layout Page */
+
+/* Reading Page */
+ul.notebooks {
+  -webkit-padding-start: 0px;
+}
+.notebooks a:hover {
+  text-decoration: none;
+}
+
+.notebook {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: normal;
+  font-weight: normal;
+  position: relative;
+  width: 56px;
+  height: 80px;
+  background-color: #68A2D4;
+  -webkit-border-radius: 2px 6px 6px 2px;
+  border-radius: 2px 6px 6px 2px;
+  -webkit-box-shadow: 0 1px 3px rgba(0,0,0,0.35);
+  box-shadow: 0 1px 3px rgba(0,0,0,0.35);
+  display: block;
+  padding: 4px;
+  line-height: 20px;
+  border: 1px solid #ddd;
+  -webkit-transition: all 0.2s ease-in-out;
+  transition: all 0.2s ease-in-out;
+  list-style: none;
+}
+
+a.notebook:hover, a.notebook:focus {
+  -webkit-box-shadow: 0 1px 4px rgba(0,105,214,0.25);
+  box-shadow: 0 1px 4px rgba(0,105,214,0.25);
+  background-color: #3F89C9;
+  -webkit-box-shadow: 0px 0px 10px rgba(0,0,0,0.55);
+  box-shadow: 0px 0px 10px rgba(0,0,0,0.15);
+  -webkit-transition: all 0.35s linear !important;
+  -ms-transition: all 0.35s linear !important;
+  -o-transition: all 0.35s linear !important;
+  transition: all 0.35s linear !important;
+}
+
+
+.notebooks:before, .notebooks:after {
+  display: table;
+  content: "";
+  line-height: 0;
+}
+
+.notebook h5 {
+  white-space: normal;
+  text-align: center;
+  color: #fff;
+  margin: 16px 0 0 0;
+  font-family: "Times New Roman",Times,"Songti SC","SimSun",serif;
+  font-size: 12px;
+  font-weight: normal;
+  line-height: 20px;
+  -webkit-transition: all 0.35s linear !important;
+/* Ending Reading Page */
+
 
 /* Writing Page */
 input[type=text]#article-title {

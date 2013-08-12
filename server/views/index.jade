@@ -2,19 +2,16 @@ extends layout
 
 block content
   .container
-    .row-fluid
-      .col-2
-        .container
-          .row-fluid
-            .row
-              h4 #{user.user}
-              a(href='/Settings') Edit Profile
-              p.small Wrote 506 words
-            .row
-              h4= title
-              each row in tasks
-                a= row.nvc_notebook_name
-      .col-10.offset1#article-list
+    .col-2
+      .row
+        h3 Notebooks:
+        ul.notebooks.row
+          each notebook in notebooks
+            li.col-4
+              a.notebook
+                h5= notebook.name
+    .col-1.splitter
+    .col-9#article-list
 
 block scripts
   script(src='/js/views/index.js')
