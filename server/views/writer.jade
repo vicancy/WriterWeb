@@ -7,10 +7,10 @@ block content
     .row-fluid
       .col-2.aside
         a(href='javascript:void(0)') + Add Notebook
-        ul.nav.nav-list.ui-sortable
+        .list-group.notebooks
           each notebook in notebooks
-            li
-              a(href='javascript:void(0)', onclick='setArticleSelected(#{notebook._id});loadArticles(#{notebook._id});')= notebook.name
+            - var id = 'notebook' + notebook._id
+            a.list-group-item(href='javascript:void(0)', onclick='setArticleSelected(#{notebook._id});loadArticles(#{notebook._id});', id='#{id}')= notebook.name
       .col-2.middle
         a(href='javascript:void(0)', onclick='newArticle(#{selectedNotebookId})') + Write An Article
         div#article-list

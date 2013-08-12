@@ -8,9 +8,9 @@ var loadArticles = function (notebookId, action) {
   };
   $.get(url, data).success(function (res) {
     $("#article-list").html(res);
-
+    var selectedArticle = $('.list-group.articles a').first();
     //Get the data passed in from route.js
-    loadArticle(getInitArticleSelected());
+    loadArticle(selectedArticle, getInitArticleSelected());
   });
 };
 
@@ -35,11 +35,14 @@ var newArticle = function (notebookId) {
   loadArticles(notebookId, 'create');
 };
 
-var loadArticle = function (articleId) {
+var loadArticle = function (element, articleId) {
+  Global.ActiveElement($('.list-group.articles a'), element);
   writing.setArticleSelected(articleId);
   writing.loadArticleContent('get');
 };
 
 $(document).ready(function () {
   loadArticles(getNotebookSelected());
+  var selectedNotebook = $('.list-group.notebooks a').first();
+  Global.ActiveElement($('.list-group.notebooks a'), selectedNotebook);
 });

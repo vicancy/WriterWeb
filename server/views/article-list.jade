@@ -1,12 +1,9 @@
 each item in items
   h3.text-left
     a(href="/articles/#{item.Address}") #{item.Title}
-  blockquote
     p.lead.text-left #{item.Abstract}
-  ul.inline
-    li
-      |NoteBook:
-      a #{item.NotebookName}
-    li.right
-      p.small Last Modified Time: #{item.LastUpdatedDate}
+  a.small.notebook
+    i.img.notebook
+    | #{item.NotebookName}
+  span.time #{item.LastUpdatedDate}
   hr

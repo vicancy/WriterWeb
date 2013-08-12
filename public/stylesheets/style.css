@@ -57,9 +57,8 @@ a {
 }
 
 .col-1.splitter {
-  width: 10px;
   height: 200px;
-  -webkit-border-image: -webkit-gradient(linear, left top, left bottom, from(#fff), color-stop(0.2, #ccc), to(#fff))0 100% 0 0 stretch;
+  -webkit-border-image: -webkit-gradient(linear, left top, left bottom, from(#fff), color-stop(0.2, #ccc), to(#fff)) 0 0 0 100% stretch;
 }
 
 .g > div { background: #fff; }
@@ -70,11 +69,11 @@ a {
 ul.notebooks {
   -webkit-padding-start: 0px;
 }
-.notebooks a:hover {
+ul.notebooks a:hover {
   text-decoration: none;
 }
 
-.notebook {
+ul .notebook {
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: normal;
@@ -96,7 +95,7 @@ ul.notebooks {
   list-style: none;
 }
 
-a.notebook:hover, a.notebook:focus {
+ul a.notebook:hover, ul a.notebook:focus {
   -webkit-box-shadow: 0 1px 4px rgba(0,105,214,0.25);
   box-shadow: 0 1px 4px rgba(0,105,214,0.25);
   background-color: #3F89C9;
@@ -109,13 +108,13 @@ a.notebook:hover, a.notebook:focus {
 }
 
 
-.notebooks:before, .notebooks:after {
+ul .notebooks:before, ul .notebooks:after {
   display: table;
   content: "";
   line-height: 0;
 }
 
-.notebook h5 {
+ul .notebook h5 {
   white-space: normal;
   text-align: center;
   color: #fff;
@@ -125,8 +124,8 @@ a.notebook:hover, a.notebook:focus {
   font-weight: normal;
   line-height: 20px;
   -webkit-transition: all 0.35s linear !important;
+}
 /* Ending Reading Page */
-
 
 /* Writing Page */
 input[type=text]#article-title {
@@ -151,8 +150,26 @@ input[type=text]#article-title:focus {
 }
 /* Ending Writing Page */
 
+/* Article Section */
 
-.nav i.img {
+
+#article-list .time {
+  font-size: 12px;
+  margin-left: 20px;
+}
+
+.small.notebook {
+  font-size: 12px;
+}
+
+.img.notebook {
+  width: 13px;
+  height: 15px;
+  background-position: -110px -192px;
+}
+/* Ending Article Section */
+
+.img {
   background-image: url(background.png);
   background-size: auto;
   background-repeat: no-repeat;

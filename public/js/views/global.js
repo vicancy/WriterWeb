@@ -15,3 +15,12 @@ $(document).ready(function () {
   window.generateUrl = generateUrl;
   initBootstrapControls();
 });
+
+function Global() {}
+
+Global.ActiveElement = function (elementGroup, element) {
+  $(elementGroup).each(function (index, element) {
+    $(element).removeClass('active');
+  });
+  $(element).addClass('active');
+};
