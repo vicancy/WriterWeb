@@ -1,13 +1,20 @@
 input(type='hidden', value=selectedArticleId)#selectedArticleId
 - article = article !== undefined ? article : { }
-.container
+.container.writing-control
   input(type="text", placeholder="Title")#article-title= article.Title
-  .row
-    .col-6#content-container
-      textarea#article-content(placeHolder="Type your article here with markdown syntax")= article.Content
-    .col-6#preview-container
-      div#article-preview!= article.Preview
+  ul.writing-controller-list
+    li
+      a(href="#", title="Preview Mode")
+        i.icon-preview-mode
+    li
+      a(href="#", title="FullScreen Mode")
+        i.icon-fullscreen-mode
+  .col-6#content-container.splitter
+    textarea#article-content(placeHolder="Type your article here with markdown syntax")= article.Content
+  .col-6#preview-container
+    div#article-preview!= article.Preview
 
 block scripts
   script(src='/vendor/marked.js')
   script(src='/js/views/writing-control.js')
+  link(rel='stylesheet', href='/vendor/font-awesome.min.css')

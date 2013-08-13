@@ -5,14 +5,16 @@ block content
   input(type='hidden', value=selectedNotebookId)#selectedNotebookId
   .container
     .row-fluid
-      .col-2.aside
-        a(href='javascript:void(0)') + Add Notebook
+      .col-2.sidebar
+        div.add
+          a(href='javascript:void(0)') + Add Notebook
         .list-group.notebooks
           each notebook in notebooks
             - var id = 'notebook' + notebook._id
             a.list-group-item(href='javascript:void(0)', onclick='setArticleSelected(#{notebook._id});loadArticles(#{notebook._id});', id='#{id}')= notebook.name
       .col-2.middle
-        a(href='javascript:void(0)', onclick='newArticle(#{selectedNotebookId})') + Write An Article
+        div.add
+          a(href='javascript:void(0)', onclick='newArticle(#{selectedNotebookId})') + Write An Article
         div#article-list
       .col-8
         include writing-control

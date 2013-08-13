@@ -1,12 +1,12 @@
 extends layout
 
 block content
-  .container
-    h3.text-left= title
-    p.lead.text-left!= content
-    ul.block-inline
-      li
-        |NoteBook:
-        a= notebook
-      li.right
-        p.small Last Modified Time: #{lastUpdatedDate}
+  .container.article
+    h1.text-left= article.Title
+    div.article-info
+      a.small.notebook
+        i.img.notebook
+        | Published at #{article.NotebookName}
+      span.time #{article.LastUpdatedDate}
+    p.text-left!= article.Preview
+    hr

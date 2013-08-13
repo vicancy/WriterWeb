@@ -2,7 +2,7 @@ extends layout
 
 block content
   .container
-    .col-2
+    .col-2.sidebar
       .row
         h3 Notebooks:
         ul.notebooks.row
@@ -10,8 +10,7 @@ block content
             li.col-4
               a.notebook
                 h5= notebook.name
-    .col-1.splitter
-    .col-9#article-list
+    .col-9.col-lg-offset-1#article-list
 
 block scripts
   script(src='/js/views/index.js')

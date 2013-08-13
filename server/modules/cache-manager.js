@@ -128,6 +128,18 @@ exports.getArticleContent = function (articleId, callback) {
 };
 
 //callback(err, article)
+/*
+{ _id: 1,
+  Address: '1B1E066A-AF7C-4E91-8506-6D4826000960',
+  UserId: 1,
+  LastUpdatedDate: '2013-08-08 11:00',
+  NotebookName: 'My Notebook',
+  NotebookId: 1,
+  Title: '“Test for update 2”',
+  Content: '## b\n',
+  Preview: '<h3>de block \n\n',
+  Abstract: '###  a blockquote\n\n' },
+*/
 exports.getArticleContentByAddress = function (address, callback) {
   console.log("getArticleContentByAddress", idAddressMapping.items());
   var articleId = idAddressMapping.get(address);

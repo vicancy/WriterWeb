@@ -42,25 +42,14 @@ a {
 /* Ending Login Page */
 
 /* Layout Page */
+
 .container .sidebar {
-  position: fixed;
-  top: 0;
-  left: 0;
-  bottom: 0;
-  overflow: auto;
-  padding: 30px;
-  padding-top: 80px;
-  border-right: 1px solid #d9d9d9;
-  -webkit-box-shadow: -1px 1px 6px rgba(0,0,0,0.35);
-  -moz-box-shadow: -1px 1px 6px rgba(0,0,0,0.35);
-  box-shadow: -1px 1px 6px rgba(0,0,0,0.35);
+  -webkit-border-image: -webkit-gradient(linear, right top, right bottom, from(#fff), color-stop(0.2, #A0C4E4), to(#fff)) 0 100% 0 0  stretch;
 }
 
-.col-1.splitter {
-  height: 200px;
-  -webkit-border-image: -webkit-gradient(linear, left top, left bottom, from(#fff), color-stop(0.2, #ccc), to(#fff)) 0 0 0 100% stretch;
+.container .splitter {
+  -webkit-border-image: -webkit-gradient(linear, right top, right bottom, from(#fff), color-stop(0.2, #ddd), to(#fff)) 0 100% 0 0  stretch;
 }
-
 .g > div { background: #fff; }
 
 /* Ending Layout Page */
@@ -96,8 +85,6 @@ ul .notebook {
 }
 
 ul a.notebook:hover, ul a.notebook:focus {
-  -webkit-box-shadow: 0 1px 4px rgba(0,105,214,0.25);
-  box-shadow: 0 1px 4px rgba(0,105,214,0.25);
   background-color: #3F89C9;
   -webkit-box-shadow: 0px 0px 10px rgba(0,0,0,0.55);
   box-shadow: 0px 0px 10px rgba(0,0,0,0.15);
@@ -125,35 +112,132 @@ ul .notebook h5 {
   line-height: 20px;
   -webkit-transition: all 0.35s linear !important;
 }
+
+.article .article-info{
+  margin: 20px 0px 20px 0px;
+}
+
+.article p {
+  font-size: 18px;
+}
+
 /* Ending Reading Page */
 
 /* Writing Page */
+
+.list-group.articles a.list-group-item {
+  border-left: none;
+  border-right: none;
+}
+
+.list-group.articles a.list-group-item:hover {
+  background-color: #fff;
+  color: #398;
+}
+
+.list-group.articles a.list-group-item.active{
+  background-color: #fff;
+  color: #428bca;
+}
+
+.list-group.articles a.list-group-item.active .list-group-item-text{
+  background-color: #fff;
+  color: #2F6EA5;
+  font-style: oblique;
+}
+
+.list-group.articles a.list-group-item.active .list-group-item-heading{
+  font-weight: bold;
+}
+
+a.list-group-item:first-child {
+  border-top-right-radius: 0px;
+  border-top-left-radius: 0px;
+}
+
 input[type=text]#article-title {
+  font-size: 18px;
+  text-align: center;
   -webkit-transition: all 0.30s ease-in-out;
   -moz-transition: all 0.30s ease-in-out;
   -ms-transition: all 0.30s ease-in-out;
   -o-transition: all 0.30s ease-in-out;
   outline: none;
+  width: 100%;
   padding: 3px 0px 3px 3px;
-  margin: 5px 1px 3px 0px;
+  margin: 5px 0px 3px 0px;
   border: none;
   border-bottom: 1px solid #DDDDDD;
 }
 
 input[type=text]#article-title:focus {
-  box-shadow: 0 0 5px rgba(81, 203, 238, 1);
   padding: 3px 0px 3px 3px;
-  margin: 5px 1px 3px 0px;
+  margin: 5px 0px 3px 0px;
   border: none;
   border-bottom: 1px solid rgba(81, 203, 238, 1);
 
 }
+
+.container.writing-control {
+  padding: 10px;
+  border-style: none;
+  background-color: #fff;
+  -webkit-box-shadow: 0px 0px 10px rgba(0,0,0,0.55);
+  box-shadow: 0px 0px 10px rgba(0,0,0,0.15);
+  -webkit-transition: all 0.35s linear !important;
+  -ms-transition: all 0.35s linear !important;
+  -o-transition: all 0.35s linear !important;
+  transition: all 0.35s linear !important;
+}
+
+textarea#article-content {
+  border-style: none;
+
+}
+
+textarea#article-content:focus {
+  border-style: none;
+  outline: 0px none transparent;
+}
+
+div.add {
+  font-style: italic;
+  font-size: 12px;
+  margin-bottom: 10px;
+}
+
+[class^="icon-"] {
+  font-family: FontAwesome;
+}
+
+.icon-preview-mode:before {
+  content : '\f0db';
+}
+
+.icon-fullscreen-mode:before {
+  content : '\f065';
+}
+
+ul.writing-controller-list {
+  display: inline;
+  float : right;
+  list-style : none;
+  margin: 13px 0px 0px -85px;
+  position: relative;
+  z-index: 1;
+}
+
+ul.writing-controller-list > li {
+  float : right;
+  padding-right : 10px;
+}
+
 /* Ending Writing Page */
 
 /* Article Section */
 
 
-#article-list .time {
+.time {
   font-size: 12px;
   margin-left: 20px;
 }
@@ -163,11 +247,12 @@ input[type=text]#article-title:focus {
 }
 
 .img.notebook {
-  width: 13px;
+  width: 14px;
   height: 15px;
   background-position: -110px -192px;
 }
 /* Ending Article Section */
+
 
 .img {
   background-image: url(background.png);

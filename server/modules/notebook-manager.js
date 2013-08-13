@@ -76,6 +76,7 @@ exports.getArticleContentFromDatabase = function (articleId, callback) {
   };
 
   databaseManager.exec(sp, params, function (err, items) {
+    console.log("getArticleContentFromDatabase", items);
     if (items.length > 1) {
       err = "Article is not Unique! ArticleId = " + articleId;
     }

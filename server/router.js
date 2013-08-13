@@ -154,55 +154,6 @@ module.exports = function (app) {
     }
   });
 
-  //Detailed article page
-  //One Extension of chrome always require jquery.ui.min.css, disable the chrome extension to avoid influencing this router
-  app.get('/articles/:title', function (req, res) {
-    console.log(req.params);
-    var title = req.params.title;
-    cacheManager.getArticleContentByAddress(title, function (err, article) {
-      if (err) {
-        throw err;
-      }
-
-      var user = (req.session.user === undefined) ? null : req.session.user;
-      if (article) {
-        res.render('article',
-          {
-            user: user,
-            title: article.Title,
-            content: article.Preview,
-            lastUpdatedDate: article.LastUpdatedDate,
-            notebook: article.NotebookName
-          });
-      } else {
-        res.render('NotFound', { title: 'Article Not Found!', user: user});
-      }
-    });
-  });
-
-  //Detailed article page
-  app.get('/articles/:id', function (req, res) {
-    var id = req.params.id;
-    cacheManager.getArticleContent(id, function (err, items) {
-      if (err) {
-        throw err;
-      }
-
-      var user = req.session.user === undefined ? null : req.session.user;
-      if (items.length === 0) {
-        res.render('NotFound', { title: 'Article Not Found!', user: user});
-      } else {
-        res.render('article',
-          {
-            user: user,
-            title: items[0].Title,
-            content: items[0].Content,
-            lastUpdatedDate: items[0].LastUpdatedDate,
-            notebook: items[0].NotebookName
-          });
-      }
-    });
-  });
 
   app.get('/env', function (req, res) {
     res.send(process.env);
