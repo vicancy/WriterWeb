@@ -105,7 +105,7 @@ var loadArticles = function (element, mode, callback) {
       });
     });
 
-    loadArticle($('.list-group.articles a').first(), mode, callback);
+    loadArticle($('.list-group.articles a:first-child'), mode, callback);
   });
 };
 
@@ -119,7 +119,7 @@ var newArticle = function () {
 };
 
 $(document).ready(function () {
-  loadArticles($('.list-group.notebooks a').first(), 'get', function () {
+  loadArticles($('.list-group.notebooks a:first-child'), 'get', function () {
     updateArticleList();
     updateArticleAbstract();
   });

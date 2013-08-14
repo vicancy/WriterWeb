@@ -2,11 +2,17 @@ function WritingUtility() {}
 
 WritingUtility.ReorgContentLayout = function (mode) {
   if (mode === 'go-normal') {
-    //Normal Layout with preview panel
+    //Normal Layout without preview panel
     $(".container[class*='-mode']").removeClass('active').addClass('hide');
     $('.container.normal-mode').removeClass('hide').addClass('active');
   } else if (mode === 'go-preview') {
+    //Normal Layout with preview panel
+    $(".container[class*='-mode']").removeClass('active').addClass('hide');
+    $('.container.preview-mode').removeClass('hide').addClass('active');
   } else if (mode === 'go-writing') {
+    //Fullscreen Layout without preview panel
+    $(".container[class*='-mode']").removeClass('active').addClass('hide');
+    $('.container.writing-mode').removeClass('hide').addClass('active');
   } else if (mode === 'go-fullscreen') {
     //Fullscreen Layout with preview panel
     $(".container[class*='-mode']").removeClass('active').addClass('hide');
@@ -71,6 +77,7 @@ ControlSelector.UpdatePreview = function (mode) {
   var preview;
   $(".article-content").each(function (index) {
     $(this).val($(".active .article-content").val());
+    $(this).change();
   });
   convertMarkdown2Html($(".article-content").val(), function (data) {
     $(".article-preview").html(data);

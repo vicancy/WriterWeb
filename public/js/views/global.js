@@ -22,5 +22,7 @@ Global.ActiveElement = function (elementGroup, element) {
   $(elementGroup).each(function (index, element) {
     $(element).removeClass('active');
   });
-  $(element).addClass('active');
+  $(element).each(function (index) {
+    $(this).addClass('active');
+  });
 };

@@ -34,10 +34,59 @@ block content
                 a(href="javascript:void(0)", title="FullScreen Mode").go-fullscreen
                   i.icon-fullscreen-mode
           .row
+            .col-12.content-container.splitter
+              textarea.article-content(placeHolder="Type your article here with markdown syntax")= article.Content
+
+    .container.preview-mode.hide
+      include navbar
+      .row
+        .col-2.sidebar
+          div.add
+            a(href='javascript:void(0)') + Add Notebook
+          .list-group.notebooks
+            each notebook in notebooks
+              - var id = notebook._id
+              a.list-group-item(href='javascript:void(0)', id='#{id}')= notebook.name
+        .col-2.middle
+          div.add
+            a(href='javascript:void(0)') + Write An Article
+          div.article-list
+        .col-8.writing-container
+          .row
+            input(type="text", placeholder="Title").article-title= article.Title
+            ul.writing-controller-list
+              li
+                a(href="javascript:void(0)", title="Normal Mode").go-normal
+                  i.icon-normal-mode
+              li
+                a(href="javascript:void(0)", title="Writing Mode").go-writing
+                  i.icon-writing-mode
+              li
+                a(href="javascript:void(0)", title="FullScreen Mode").go-fullscreen
+                  i.icon-fullscreen-mode
+          .row
             .col-6.content-container.splitter
               textarea.article-content(placeHolder="Type your article here with markdown syntax")= article.Content
             .col-6.preview-container
               div.article-preview!= article.Preview
+
+    .container.writing-mode.hide
+      .col-12.writing-container
+        .row
+          input(type="text", placeholder="Title").article-title= article.Title
+          ul.writing-controller-list
+            li
+              a(href="javascript:void(0)", title="Normal Mode").go-normal
+                i.icon-normal-mode
+            li
+              a(href="javascript:void(0)", title="Preview Mode").go-preview
+                i.icon-preview-mode
+            li
+              a(href="javascript:void(0)", title="Fullscreen Mode").go-fullscreen
+                i.icon-fullscreen-mode
+        .row
+          .col-12.content-container.splitter
+            textarea.article-content(placeHolder="Type your article here with markdown syntax")= article.Content
 
     .container.fullscreen-mode.hide
       .col-12.writing-container
