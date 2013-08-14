@@ -156,7 +156,7 @@ a.list-group-item:first-child {
 }
 
 input[type=text].article-title {
-  font-size: 18px;
+  font-size: 20px;
   text-align: center;
   -webkit-transition: all 0.30s ease-in-out;
   -moz-transition: all 0.30s ease-in-out;
@@ -178,7 +178,7 @@ input[type=text].article-title:focus {
 
 }
 
-.container.writing-control {
+.writing-container {
   padding: 10px;
   border-style: none;
   background-color: #fff;
@@ -190,12 +190,12 @@ input[type=text].article-title:focus {
   transition: all 0.35s linear !important;
 }
 
-textarea#article-content {
+textarea.article-content {
   border-style: none;
 
 }
 
-textarea#article-content:focus {
+textarea.article-content:focus {
   border-style: none;
   outline: 0px none transparent;
 }
@@ -238,6 +238,10 @@ ul.writing-controller-list {
 ul.writing-controller-list > li {
   float : right;
   padding-right : 10px;
+}
+
+.fullscreen-mode .writing-container {
+  margin-top: -60px;
 }
 
 /* Ending Writing Page */

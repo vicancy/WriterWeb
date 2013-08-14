@@ -7,6 +7,7 @@ block content
   input(type='hidden', value=selectedArticleId)#selectedArticleId
   div.stack
     .container.normal-mode.active
+      include navbar
       .row
         .col-2.sidebar
           div.add
@@ -39,22 +40,24 @@ block content
               div.article-preview!= article.Preview
 
     .container.fullscreen-mode.hide
-      .writing-container
-        input(type="text", placeholder="Title").article-title= article.Title
-        ul.writing-controller-list
-          li
-            a(href="javascript:void(0)", title="Normal Mode").go-normal
-              i.icon-normal-mode
-          li
-            a(href="javascript:void(0)", title="Preview Mode").go-preview
-              i.icon-preview-mode
-          li
-            a(href="javascript:void(0)", title="Writing Mode").go-writing
-              i.icon-writing-mode
-        .col-6.content-container.splitter
-          textarea.article-content(placeHolder="Type your article here with markdown syntax")= article.Content
-        .col-6.preview-container
-          div.article-preview!= article.Preview
+      .col-12.writing-container
+        .row
+          input(type="text", placeholder="Title").article-title= article.Title
+          ul.writing-controller-list
+            li
+              a(href="javascript:void(0)", title="Normal Mode").go-normal
+                i.icon-normal-mode
+            li
+              a(href="javascript:void(0)", title="Preview Mode").go-preview
+                i.icon-preview-mode
+            li
+              a(href="javascript:void(0)", title="Writing Mode").go-writing
+                i.icon-writing-mode
+        .row
+          .col-6.content-container.splitter
+            textarea.article-content(placeHolder="Type your article here with markdown syntax")= article.Content
+          .col-6.preview-container
+            div.article-preview!= article.Preview
 
 
 block scripts

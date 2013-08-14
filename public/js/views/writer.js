@@ -21,29 +21,33 @@ var delay = (function () {
 })();
 
 var initPreviewPanel = function () {
-  var content_ctl = $(".active .article-content");
-  var content = content_ctl.val();
-  content_ctl.keyup(function () {
-    delay(function () {
-      var curval = content_ctl.val();
-      if (curval !== content){
-        ControlSelector.UpdatePreview();
-        content = content_ctl.val();
-      }
-    }, 500);
+  $(".article-content").each(function () {
+    var content_ctl = $(this);
+    var content = content_ctl.val();
+    content_ctl.keyup(function () {
+      delay(function () {
+        var curval = content_ctl.val();
+        if (curval !== content){
+          ControlSelector.UpdatePreview();
+          content = content_ctl.val();
+        }
+      }, 500);
+    });
   });
 
-  var title_ctl = $(".active .article-title");
-  var title = title_ctl.val();
-  title_ctl.keyup(function () {
-    delay(function () {
-      var curval = title_ctl.val();
-      if (curval !== title) {
-        ControlSelector.UpdatePreview('title');
-        title = title_ctl.val();
-      }
-    }, 100);
-  });
+  $(".article-title").each(function () {
+    var title_ctl = $(this);
+    var title = title_ctl.val();
+    title_ctl.keyup(function () {
+      delay(function () {
+        var curval = title_ctl.val();
+        if (curval !== title) {
+          ControlSelector.UpdatePreview('title');
+          title = title_ctl.val();
+        }
+      }, 100);
+    });
+  })
 };
 
 
@@ -72,9 +76,15 @@ var loadArticle = function (element, mode, callback) {
   ControlSelector.SetArticleSelected($('.list-group.articles a'), element);
 
   ServerUtility.LoadArticleContent(ControlSelector.GetArticleSelected(), mode, function (params) {
-    $(".active .article-title").val(params.title);
-    $(".active .article-content").val(params.markdown);
-    $(".active .article-preview").html(params.html);
+    $(".article-title").each(function (index) {
+      $(this).val(params.title);
+    });
+    $(".article-content").each(function (index) {
+      $(this).val(params.markdown);
+    });
+    $(".article-preview").each(function (index) {
+      $(this).html(params.html);
+    });
     initPreviewPanel();
     callback();
   });
@@ -85,7 +95,7 @@ var loadArticles = function (element, mode, callback) {
   ControlSelector.SetNotebookSelected($('.list-group.notebooks a'), element);
 
   ServerUtility.LoadArticles(ControlSelector.GetNotebookSelected(), mode, function (res) {
-    $(".active .article-list").html(res);
+    $(".article-list").html(res);
 
     //Add click event to every article list item
     $('.list-group.articles a').each(function (index) {

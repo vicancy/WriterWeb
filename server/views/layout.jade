@@ -15,32 +15,5 @@ html
     if user != null
       input(type='hidden', value= user._id)#userId
     block define
-    div(class='navbar navbar-fixed-top navbar-inverse')
-      .container
-        button(type='button', class='navbar-toggle', data-toggle='collapse', data-target='.bs-navbar-collapse')
-          .span(class='icon-bar')
-          .span(class='icon-bar')
-          .span(class='icon-bar')
-        a(class='navbar-brand', href='/') Write Everywhere
-        div(class="nav-collapse collapse bs-navbar-collapse")
-          if user != null
-            div.btn-group.pull-right.navbar-btn
-              a(type="button", class="btn btn-primary btn-sm dropdown-toggle", data-toggle="dropdown") #{user.Nickname}
-                span.caret
-              ul.dropdown-menu
-                li
-                  a(href="/Settings").navbar-link Settings
-                  a(href="/SignOut").navbar-link Sign Out
-
-            ul.navbar-nav.pull-right.nav
-              li
-                if (pagemode && (pagemode.toLowerCase() == 'writer'.toLowerCase()))
-                  a(href="/home")
-                    i.img.reader
-                    |Reader's Page
-                else
-                  a(href="/Writer")
-                    i.img.writer
-                    |Writer's Page
     block content
     block scripts
