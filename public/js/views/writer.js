@@ -1,64 +1,118 @@
-var writing = new window.writing();
-
-var loadArticles = function (notebookId, action) {
-  var url = window.generateUrl("editable-article-list");
-  var data = {
-    notebookId: notebookId,
-    action: action
-  };
-  $.get(url, data).success(function (res) {
-    $("#article-list").html(res);
-    var selectedArticle = $('.list-group.articles a').first();
-    //Get the data passed in from route.js
-    loadArticle(selectedArticle, getInitArticleSelected());
-  });
-};
-
-var setNotebookSelected = function (notebookId) {
-  $("#selectedNotebookId").val(notebookId);
-};
-
-var getNotebookSelected = function () {
-  return $("#selectedNotebookId").val();
-};
-
-var getInitArticleSelected = function () {
-  return $("#initSelectedArticleId").val();
-};
-
-var newArticle = function (notebookId) {
-  //Post a default article to server -- seems not necessory, can be done when auto-saving
-
-  //Set the newly added article to the selectedArticleId -- if not communicate with server, can not get the article id
-  //TODO: talk to server or not?
-  //If not: do this when auto-saving
-  loadArticles(notebookId, 'create');
-};
-
 var updateArticleList = function () {
-  writing.updateTitle(function (index, item) {
+  ControlSelector.UpdateTitle(function (index, item) {
     var title = $(this).val();
     $('.list-group.articles a.active h4').text(title);
   });
 };
 
 var updateArticleAbstract = function () {
-  writing.updateContent(function (index, item) {
+  ControlSelector.UpdateContent(function (index, item) {
     var abstract = $(this).val().substring(0, 200);
     $('.list-group.articles a.active p').text(abstract);
   });
 };
 
-var loadArticle = function (element, articleId) {
-  Global.ActiveElement($('.list-group.articles a'), element);
-  writing.setArticleSelected(articleId);
-  writing.loadArticleContent('get');
-  updateArticleList();
-  updateArticleAbstract();
+var delay = (function () {
+  var timer = 0;
+  return function(callback, ms) {
+    clearTimeout(timer);
+    timer = setTimeout(callback, ms);
+  };
+})();
+
+var initPreviewPanel = function () {
+  var content_ctl = $(".active .article-content");
+  var content = content_ctl.val();
+  content_ctl.keyup(function () {
+    delay(function () {
+      var curval = content_ctl.val();
+      if (curval !== content){
+        ControlSelector.UpdatePreview();
+        content = content_ctl.val();
+      }
+    }, 500);
+  });
+
+  var title_ctl = $(".active .article-title");
+  var title = title_ctl.val();
+  title_ctl.keyup(function () {
+    delay(function () {
+      var curval = title_ctl.val();
+      if (curval !== title) {
+        ControlSelector.UpdatePreview('title');
+        title = title_ctl.val();
+      }
+    }, 100);
+  });
+};
+
+
+var initClickEvent = function () {
+  //Add click event to every notebook list item
+  $('.list-group.notebooks a').each(function (index) {
+    $(this).click(function () {
+      loadArticles($(this), 'get', function () {});
+    });
+  });
+  //Add click event to add article button
+  $('.add a').click(function () {
+    newArticle();
+  });
+  //Add click event to add notebook button
+
+  //Add click event to every go-<mode> button
+  $("a[class^='go-']").each(function (index) {
+    $(this).click(function () {
+      WritingUtility.ReorgContentLayout($(this).attr('class'));
+    });
+  });
+};
+
+var loadArticle = function (element, mode, callback) {
+  ControlSelector.SetArticleSelected($('.list-group.articles a'), element);
+
+  ServerUtility.LoadArticleContent(ControlSelector.GetArticleSelected(), mode, function (params) {
+    $(".active .article-title").val(params.title);
+    $(".active .article-content").val(params.markdown);
+    $(".active .article-preview").html(params.html);
+    initPreviewPanel();
+    callback();
+  });
+};
+
+var loadArticles = function (element, mode, callback) {
+
+  ControlSelector.SetNotebookSelected($('.list-group.notebooks a'), element);
+
+  ServerUtility.LoadArticles(ControlSelector.GetNotebookSelected(), mode, function (res) {
+    $(".active .article-list").html(res);
+
+    //Add click event to every article list item
+    $('.list-group.articles a').each(function (index) {
+      $(this).click(function () {
+        loadArticle($(this), 'get', function () {});
+      });
+    });
+
+    loadArticle($('.list-group.articles a').first(), mode, callback);
+  });
+};
+
+var newArticle = function () {
+  //Post a default article to server -- seems not necessory, can be done when auto-saving
+
+  //Set the newly added article to the selectedArticleId -- if not communicate with server, can not get the article id
+  //TODO: talk to server or not?
+  //If not: do this when auto-saving
+  loadArticles($('.list-group.notebooks a.active'), 'create', function () {});
 };
 
 $(document).ready(function () {
-  loadArticles(getNotebookSelected());
-  var selectedNotebook = $('.list-group.notebooks a').first();
-  Global.ActiveElement($('.list-group.notebooks a'), selectedNotebook);
+  loadArticles($('.list-group.notebooks a').first(), 'get', function () {
+    updateArticleList();
+    updateArticleAbstract();
+  });
+
+  initClickEvent();
+
 });

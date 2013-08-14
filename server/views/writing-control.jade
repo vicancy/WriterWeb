@@ -4,10 +4,16 @@ input(type='hidden', value=selectedArticleId)#selectedArticleId
   input(type="text", placeholder="Title")#article-title= article.Title
   ul.writing-controller-list
     li
-      a(href="#", title="Preview Mode")
+      a(href="javascript:void(0)", title="Normal Mode").go-normal
+        i.icon-normal-mode
+    li
+      a(href="javascript:void(0)", title="Preview Mode").go-preview
         i.icon-preview-mode
     li
-      a(href="#", title="FullScreen Mode")
+      a(href="javascript:void(0)", title="Writing Mode").go-writing
+        i.icon-writing-mode
+    li
+      a(href="javascript:void(0)", title="FullScreen Mode").go-fullscreen
         i.icon-fullscreen-mode
   .col-6#content-container.splitter
     textarea#article-content(placeHolder="Type your article here with markdown syntax")= article.Content

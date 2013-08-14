@@ -1,23 +1,64 @@
 extends layout
 block define
   - var pagemode = 'writer'
+  - article = article !== undefined ? article : { }
 block content
   input(type='hidden', value=selectedNotebookId)#selectedNotebookId
-  .container
-    .row-fluid
-      .col-2.sidebar
-        div.add
-          a(href='javascript:void(0)') + Add Notebook
-        .list-group.notebooks
-          each notebook in notebooks
-            - var id = 'notebook' + notebook._id
-            a.list-group-item(href='javascript:void(0)', onclick='setArticleSelected(#{notebook._id});loadArticles(#{notebook._id});', id='#{id}')= notebook.name
-      .col-2.middle
-        div.add
-          a(href='javascript:void(0)', onclick='newArticle(#{selectedNotebookId})') + Write An Article
-        div#article-list
-      .col-8
-        include writing-control
+  input(type='hidden', value=selectedArticleId)#selectedArticleId
+  div.stack
+    .container.normal-mode.active
+      .row
+        .col-2.sidebar
+          div.add
+            a(href='javascript:void(0)') + Add Notebook
+          .list-group.notebooks
+            each notebook in notebooks
+              - var id = notebook._id
+              a.list-group-item(href='javascript:void(0)', id='#{id}')= notebook.name
+        .col-2.middle
+          div.add
+            a(href='javascript:void(0)') + Write An Article
+          div.article-list
+        .col-8.writing-container
+          .row
+            input(type="text", placeholder="Title").article-title= article.Title
+            ul.writing-controller-list
+              li
+                a(href="javascript:void(0)", title="Preview Mode").go-preview
+                  i.icon-preview-mode
+              li
+                a(href="javascript:void(0)", title="Writing Mode").go-writing
+                  i.icon-writing-mode
+              li
+                a(href="javascript:void(0)", title="FullScreen Mode").go-fullscreen
+                  i.icon-fullscreen-mode
+          .row
+            .col-6.content-container.splitter
+              textarea.article-content(placeHolder="Type your article here with markdown syntax")= article.Content
+            .col-6.preview-container
+              div.article-preview!= article.Preview
+
+    .container.fullscreen-mode.hide
+      .writing-container
+        input(type="text", placeholder="Title").article-title= article.Title
+        ul.writing-controller-list
+          li
+            a(href="javascript:void(0)", title="Normal Mode").go-normal
+              i.icon-normal-mode
+          li
+            a(href="javascript:void(0)", title="Preview Mode").go-preview
+              i.icon-preview-mode
+          li
+            a(href="javascript:void(0)", title="Writing Mode").go-writing
+              i.icon-writing-mode
+        .col-6.content-container.splitter
+          textarea.article-content(placeHolder="Type your article here with markdown syntax")= article.Content
+        .col-6.preview-container
+          div.article-preview!= article.Preview
+
+
 block scripts
   script(src='/vendor/marked.js')
+  script(src='/js/views/writing-utility.js')
   script(src='/js/views/writer.js')
+  link(rel='stylesheet', href='/vendor/font-awesome.min.css')

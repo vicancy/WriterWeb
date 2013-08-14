@@ -1,7 +1,5 @@
-input(type='hidden', value=selectedArticleId)#initSelectedArticleId
 div.list-group.articles
   each item in items
-    - var id = 'article' + item._id
-    a.list-group-item(href='javascript:void(0)', onclick='loadArticle(this, #{item._id})', id='#{id}')
+    a.list-group-item(href='javascript:void(0)', id='#{item._id}')
       h4.list-group-item-heading #{item.Title}
       p.list-group-item-text #{item.Abstract}

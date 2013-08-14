@@ -22,7 +22,7 @@ a {
   border-radius: 3px;
 }
 
-#article-content {
+.article-content {
   width: 100%;
   min-height: 600px;
 }
@@ -155,7 +155,7 @@ a.list-group-item:first-child {
   border-top-left-radius: 0px;
 }
 
-input[type=text]#article-title {
+input[type=text].article-title {
   font-size: 18px;
   text-align: center;
   -webkit-transition: all 0.30s ease-in-out;
@@ -170,7 +170,7 @@ input[type=text]#article-title {
   border-bottom: 1px solid #DDDDDD;
 }
 
-input[type=text]#article-title:focus {
+input[type=text].article-title:focus {
   padding: 3px 0px 3px 3px;
   margin: 5px 0px 3px 0px;
   border: none;
@@ -183,7 +183,7 @@ input[type=text]#article-title:focus {
   border-style: none;
   background-color: #fff;
   -webkit-box-shadow: 0px 0px 10px rgba(0,0,0,0.55);
-  box-shadow: 0px 0px 10px rgba(0,0,0,0.15);
+  box-shadow: 2px 2px 10px rgba(0,0,0,0.45);
   -webkit-transition: all 0.35s linear !important;
   -ms-transition: all 0.35s linear !important;
   -o-transition: all 0.35s linear !important;
@@ -215,14 +215,22 @@ div.add {
 }
 
 .icon-fullscreen-mode:before {
-  content : '\f065';
+  content : '\f0b2';
+}
+
+.icon-normal-mode:before {
+  content : '\f181';
+}
+
+.icon-writing-mode:before {
+  content : '\f040';
 }
 
 ul.writing-controller-list {
   display: inline;
   float : right;
   list-style : none;
-  margin: 13px 0px 0px -85px;
+  margin: 13px 0px 0px -185px;
   position: relative;
   z-index: 1;
 }

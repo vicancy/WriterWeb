@@ -126,12 +126,16 @@ module.exports = function (app) {
         if (userId !== item.UserId) {
           res.render('NotFound', { title : 'Article Belongs to Current User Not Found !', user : user});
         }
+
+        res.send('ok', 200);
+        /* TO BE MODIFIED
         res.render('writing-page', {
           title : "Purely Writing",
           article : item,
           selectedArticleId : item._id,
           mode : "fullscreen"
         });
+        */
       });
     }
   });
