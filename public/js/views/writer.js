@@ -47,7 +47,7 @@ var initPreviewPanel = function () {
         }
       }, 100);
     });
-  })
+  });
 };
 
 
@@ -81,6 +81,7 @@ var loadArticle = function (element, mode, callback) {
     });
     $(".article-content").each(function (index) {
       $(this).val(params.markdown);
+      $(this).change();
     });
     $(".article-preview").each(function (index) {
       $(this).html(params.html);
@@ -124,5 +125,9 @@ $(document).ready(function () {
   });
 
   initClickEvent();
+
+  $('textarea').each(function () {
+    $(this).css('overflow', 'hidden').autogrow();
+  });
 
 });

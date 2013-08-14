@@ -7,6 +7,14 @@ a {
   color: #00B7FF;
 }
 
+textarea {
+  resize: none;
+}
+
+p {
+  word-wrap: break-word;
+}
+
 .container h3 {
   font-size: 20px;
 }
